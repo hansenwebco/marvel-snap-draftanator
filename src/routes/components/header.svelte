@@ -1,0 +1,1 @@
+<a href="/"><img alt="Marvel Snap Draftanator" src="/images/site-header.png" /></a>

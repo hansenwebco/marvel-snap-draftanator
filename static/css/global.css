@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0');
+
+
+body {
+    background-color: #222;
+    font-family: 'Orbitron', Arial, Helvetica, sans-serif;
+    color: #DDD;
+    background-image: url('../images/background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+a {
+    color: white;
+}
+
+a:hover {
+    color: skyblue;
+}
+
+.icon {
+    font-size: 120px;
+    color: white;
+    background-color: #2f4294;
+    border-radius: 10px;
+    padding: 10px;
+    border: solid 3px white;
+    filter: drop-shadow(0 0 15px #111);
+}
