@@ -14,19 +14,17 @@
 
 <style>
 	.container {
-		border: solid 1px green;
-		margin-top:50px;
-		display: flex;
+		margin-top: 50px;
+		display: inline-flex;
 		flex-flow: wrap;
 		align-items: center;
 		justify-content: center;
-		width:100%;
+		width: 100%;
 	}
 	.mode {
 		width: 300px;
 		text-align: center;
-		margin:20px;
-		border: solid 1px red;
+		margin: 20px;
 	}
 	.icon {
 		font-size: 120px;

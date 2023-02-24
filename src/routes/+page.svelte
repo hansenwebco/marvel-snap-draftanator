@@ -8,14 +8,8 @@
 	<title>Marvel Snap - Draftanator</title>
 </svelte:head>
 
-<div>
-	<Header/>
-</div>
+<Header />
 
+<SelectMode />
 
-	<SelectMode />
-
-<div>
-	<Footer />
-</div>
-
+<Footer />
