@@ -12,9 +12,10 @@
 	<Header/>
 </div>
 
-<div>
+
 	<SelectMode />
-</div>
+
 <div>
 	<Footer />
 </div>
+
