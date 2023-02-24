@@ -1,8 +1,11 @@
 <script>
 	import { onMount } from 'svelte';
 	import * as global from '$lib/global.js';
-	import { API_URL } from '$lib/store.js';
 	import { get } from 'svelte/store';
+	
+	// get items from our store
+	import { API_URL } from '$lib/store.js';
+	import { DECK } from '$lib/store.js';	
 
 	let pickList = '';
 	let cards, pick1, pick2, pick3;
@@ -14,6 +17,7 @@
 	let card3Text = '';
 
 	const DATA_URL = get(API_URL);
+	
 	onMount(async () => {
 		const response = await fetch(DATA_URL + '/data/snap.json', {
 			method: 'GET',
@@ -61,29 +65,30 @@
 
 	function cardPicked(cardId) {
 		pickList += '|' + cardId;
+		$DECK.push(cardId)
+		DECK.set($DECK);
 		pickCards(0);
-		console.log(pickList);
 	}
 </script>
 
 <div id="arena-pick-ui">
 	<div class="arena-pick">
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<img on:click={cardPicked(cards[pick1].id)} src={card1Image} alt={card1Alt} />
+		<img on:click={cardPicked(cards[pick1])} src={card1Image} alt={card1Alt} />
 		<div class="card-desc" id="card-desc-1">{card1Text}</div>
 		<button on:click={() => pickCards(1)}>Don't Have Card</button>
 	</div>
 
 	<div class="arena-pick">
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<img on:click={cardPicked(cards[pick2].id)} src={card2Image} alt={card2Alt} />
+		<img on:click={cardPicked(cards[pick2])} src={card2Image} alt={card2Alt} />
 		<div class="card-desc" id="card-desc-2">{card2Text}</div>
 		<button on:click={() => pickCards(2)}>Don't Have Card</button>
 	</div>
 
 	<div class="arena-pick">
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<img on:click={cardPicked(cards[pick3].id)} src={card3Image} alt={card3Alt} />
+		<img on:click={cardPicked(cards[pick3])} src={card3Image} alt={card3Alt} />
 		<div class="card-desc" id="card-desc-3">{card3Text}</div>
 		<button on:click={() => pickCards(3)}>Don't Have Card</button>
 	</div>
@@ -107,7 +112,7 @@
 	}
 	.arena-pick {
 		text-align: center;
-		margin:0px;
+		margin: 0px;
 	}
 
 	.card-desc {
