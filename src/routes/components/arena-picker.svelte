@@ -2,10 +2,10 @@
 	import { onMount } from 'svelte';
 	import * as global from '$lib/global.js';
 	import { get } from 'svelte/store';
-	
+
 	// get items from our store
 	import { API_URL } from '$lib/store.js';
-	import { DECK } from '$lib/store.js';	
+	import { DECK } from '$lib/store.js';
 
 	let pickList = '';
 	let cards, pick1, pick2, pick3;
@@ -17,7 +17,7 @@
 	let card3Text = '';
 
 	const DATA_URL = get(API_URL);
-	
+
 	onMount(async () => {
 		const response = await fetch(DATA_URL + '/data/snap.json', {
 			method: 'GET',
@@ -32,6 +32,7 @@
 	function pickCards(redrawCardNum) {
 		let totalCards = cards.length - 1;
 
+		console.log(pickList);
 		if (redrawCardNum == 1 || redrawCardNum == 0) {
 			do {
 				pick1 = global.randomNum(0, totalCards);
@@ -63,9 +64,9 @@
 		}
 	}
 
-	function cardPicked(cardId) {
-		pickList += '|' + cardId;
-		$DECK.push(cardId)
+	function cardPicked(card) {
+		pickList += '|' + card.id;
+		$DECK.push(card);
 		DECK.set($DECK);
 		pickCards(0);
 	}
