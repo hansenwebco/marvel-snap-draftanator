@@ -10,6 +10,7 @@
 	DECK.subscribe((c) => {
 		cards = c;
 	});
+
 </script>
 
 <div id="flex-container">

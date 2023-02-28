@@ -1,8 +1,6 @@
 <script>
 	import { DECK } from '$lib/store.js';
 
-	let energy1, energy2, energy3, energy4, energy5, energy6;
-
 	let cards = [];
 	let energy = new Array(5);  // local variable to bind to the table
 

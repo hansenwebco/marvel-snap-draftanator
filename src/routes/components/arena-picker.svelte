@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import * as global from '$lib/global.js';
+	import {sortCards , randomNum } from '$lib/global.js';
 	import { get } from 'svelte/store';
 
 	// get items from our store
@@ -32,10 +32,9 @@
 	function pickCards(redrawCardNum) {
 		let totalCards = cards.length - 1;
 
-		console.log(pickList);
 		if (redrawCardNum == 1 || redrawCardNum == 0) {
 			do {
-				pick1 = global.randomNum(0, totalCards);
+				pick1 = randomNum(0, totalCards);
 			} while (pickList.indexOf('|' + pick1) >= 0 || cards[pick1].released === false);
 
 			card1Image = DATA_URL + '/images/cards/' + cards[pick1].id + '.webp';
@@ -45,7 +44,7 @@
 
 		if (redrawCardNum == 2 || redrawCardNum == 0) {
 			do {
-				pick2 = global.randomNum(0, totalCards);
+				pick2 = randomNum(0, totalCards);
 			} while (pick1 === pick2 || pickList.indexOf('|' + pick2) >= 0 || cards[pick2].released === false);
 
 			card2Image = DATA_URL + '/images/cards/' + cards[pick2].id + '.webp';
@@ -55,7 +54,7 @@
 
 		if (redrawCardNum == 3 || redrawCardNum == 0) {
 			do {
-				pick3 = global.randomNum(1, totalCards);
+				pick3 = randomNum(1, totalCards);
 			} while (pick1 === pick3 || pick2 === pick3 || pickList.indexOf('|' + pick3) >= 0 || cards[pick3].released === false);
 
 			card3Image = DATA_URL + '/images/cards/' + cards[pick3].id + '.webp';
@@ -67,12 +66,13 @@
 	function cardPicked(card) {
 		pickList += '|' + card.id;
 		$DECK.push(card);
+		$DECK = sortCards($DECK);
 		DECK.set($DECK);
 		pickCards(0);
 	}
 </script>
 
-<div id="arena-pick-ui">
+<div class="component-ui">
 	<div class="arena-pick">
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<img on:click={cardPicked(cards[pick1])} src={card1Image} alt={card1Alt} />
@@ -96,21 +96,7 @@
 </div>
 
 <style>
-	#arena-pick-ui {
-		background-color: #333;
-		max-width: 900px;
-		margin-left: auto;
-		margin-right: auto;
-		padding: 30px;
-		border-radius: 25px;
-		margin-top: 50px;
-		box-sizing: content-box;
-		border: solid 4px #95a2e4;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex-flow: wrap;
-	}
+
 	.arena-pick {
 		text-align: center;
 		margin: 0px;

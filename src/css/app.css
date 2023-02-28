@@ -14,16 +14,15 @@ body {
     color: #DDD;
     background-image: url('../images/background.jpg');
     background-size: 100% 100%;
-    ;
 
-    /*  this breaks shit
+    /*  this breaks stuff
         width: 100%;
         margin:0px;
         overflow: hidden;
     */
-    margin:0px;
+    margin: 0px;
     padding: 0px;
-  
+
 }
 
 a {
@@ -32,4 +31,20 @@ a {
 
 a:hover {
     color: skyblue;
+}
+
+.component-ui {
+    background-color: #333;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 30px;
+    border-radius: 25px;
+    margin-top: 50px;
+    box-sizing: content-box;
+    border: solid 4px #95a2e4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: wrap;
 }

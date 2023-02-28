@@ -1,8 +1,16 @@
 <script>
 	import Footer from '../components/footer.svelte';
 	import Header from '../components/header.svelte';
-    import ArenaPicker from '../components/arena-picker.svelte';
 	import Deck from '../components/deck-view.svelte';
+	import DraftComplete from '../components/draft-complete.svelte';
+	import ArenaPicker from '../components/arena-picker.svelte';
+
+	import { DECK } from '$lib/store.js';
+
+	let cardsDrafted = 0;
+	DECK.subscribe((c) => {
+		cardsDrafted = c.length;
+	});
 </script>
 
 <svelte:head>
@@ -13,11 +21,21 @@
 	<Header />
 </div>
 <div>
-	<Deck/>
+	<Deck />
 </div>
-<div>
-    <ArenaPicker />
-</div>
+
+{#if cardsDrafted < 12}
+	<div>
+		<ArenaPicker />
+	</div>
+{/if}
+
+{#if cardsDrafted >= 12}
+	<div>
+		<DraftComplete />
+	</div>
+{/if}
+
 <div>
 	<Footer />
 </div>
