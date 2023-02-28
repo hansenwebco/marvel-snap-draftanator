@@ -6,7 +6,7 @@
 	#heading {
 		font-size: 30px;
 		text-align: center;
-		margin-top: 50px;
+		margin-top: 20px;
 		color: white;
 		width:100%;
 	}

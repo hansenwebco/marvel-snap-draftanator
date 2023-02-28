@@ -1,4 +1,9 @@
 
+<script>
+
+
+</script>
+
 <div id="footer">
 	Created by <a target="_blank" rel="noreferrer" href="https://www.stonedonkey.com">stonedonkey</a> -
 	Follow on <a target="_blank" rel="noreferrer" href="https://twitch.tv/stonedonkey">Twitch</a> - 

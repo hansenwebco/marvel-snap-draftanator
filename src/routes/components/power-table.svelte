@@ -17,7 +17,8 @@
 				if (x == 5) return elm.energy >= x + 1;
 				else return elm.energy == x + 1;
 			}).length;
-			energy[x] = count * 10;
+
+			energy[x] = count > 0 ? count * 10 : 1 ;
 		}
 	}
 </script>
@@ -25,7 +26,7 @@
 <table id="energy-table">
 	<tr id="top-table">
 		{#each Array(6) as _, index (index)}
-			<td valign="bottom"><div id="energy{index + 1}" style="height:{energy[index]}px" /></td>
+			<td valign="bottom"><div class="energy" style="height:{energy[index]}px" /></td>
 		{/each}
 	</tr>
 	<tr>
@@ -63,39 +64,8 @@
 		font-size: 8px;
 		text-align: center;
 	}
-	#energy1 {
+	.energy {
 		width: 10px;
-		height: 1px;
-		background-color: #1e6ff4;
-	}
-
-	#energy2 {
-		width: 10px;
-		height: 1px;
-		background-color: #1e6ff4;
-	}
-
-	#energy3 {
-		width: 10px;
-		height: 1px;
-		background-color: #1e6ff4;
-	}
-
-	#energy4 {
-		width: 10px;
-		height: 1px;
-		background-color: #1e6ff4;
-	}
-
-	#energy5 {
-		width: 10px;
-		height: 1px;
-		background-color: #1e6ff4;
-	}
-
-	#energy6 {
-		width: 10px;
-		height: 1px;
 		background-color: #1e6ff4;
 	}
 </style>
