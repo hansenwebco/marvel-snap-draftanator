@@ -30,12 +30,15 @@
 	});
 
 	function pickCards(redrawCardNum) {
+		
+		// need to remove all click handlers until the images load
+		
 		let totalCards = cards.length - 1;
-
+		
 		if (redrawCardNum == 1 || redrawCardNum == 0) {
 			do {
 				pick1 = randomNum(0, totalCards);
-			} while (pickList.indexOf('|' + pick1) >= 0 || cards[pick1].released === false);
+			} while (pickList.indexOf('|' + cards[pick1].id) >= 0 || cards[pick1].released === false);
 
 			card1Image = DATA_URL + '/images/cards/' + cards[pick1].id + '.webp';
 			card1Alt = cards[pick1].name;
@@ -45,7 +48,7 @@
 		if (redrawCardNum == 2 || redrawCardNum == 0) {
 			do {
 				pick2 = randomNum(0, totalCards);
-			} while (pick1 === pick2 || pickList.indexOf('|' + pick2) >= 0 || cards[pick2].released === false);
+			} while (pick1 === pick2 || pickList.indexOf('|' + cards[pick2].id) >= 0 || cards[pick2].released === false);
 
 			card2Image = DATA_URL + '/images/cards/' + cards[pick2].id + '.webp';
 			card2Alt = cards[pick2].name;
@@ -55,12 +58,13 @@
 		if (redrawCardNum == 3 || redrawCardNum == 0) {
 			do {
 				pick3 = randomNum(1, totalCards);
-			} while (pick1 === pick3 || pick2 === pick3 || pickList.indexOf('|' + pick3) >= 0 || cards[pick3].released === false);
+			} while (pick1 === pick3 || pick2 === pick3 || pickList.indexOf('|' + cards[pick3].id) >= 0 || cards[pick3].released === false);
 
 			card3Image = DATA_URL + '/images/cards/' + cards[pick3].id + '.webp';
 			card3Alt = cards[pick3].name;
 			card3Text = cards[pick3].desc;
 		}
+	
 	}
 
 	function cardPicked(card) {
