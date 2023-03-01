@@ -6,7 +6,7 @@
 	</div>
 
 	<div class="mode">
-		<span id="btn-sealed" class="material-symbols-outlined icon mode-sealed">batch_prediction</span><br /><br />
+		<a href="/sealed"><span id="btn-sealed" class="material-symbols-outlined icon mode-sealed">batch_prediction</span><br /><br /></a>
 		<a class="btn btn-primary mode-sealed" id="btn-sealed-2">Sealed Mode</a>
 		<div class="start-text">Open five packs of random cards and build the best deck you can!</div>
 	</div>

@@ -12,7 +12,7 @@ body {
     background-color: #222;
     font-family: 'Orbitron', Arial, Helvetica, sans-serif;
     color: #DDD;
-    background-image: url('../images/background.jpg');
+    background-image: url('/images/background.jpg');
     background-size: 100% 100%;
 
     /*  this breaks stuff
