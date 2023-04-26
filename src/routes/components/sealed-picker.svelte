@@ -3,7 +3,7 @@
 	import { get } from 'svelte/store';
 	import { API_URL } from '$lib/store.js';
 	import { DECK } from '$lib/store.js';
-	import {sortCards , randomNum } from '$lib/global.js';
+	import { sortCards, randomNum } from '$lib/global.js';
 
 	const DATA_URL = get(API_URL);
 	const displayedCards = [null, null, null, null, null];
@@ -23,8 +23,8 @@
 			method: 'GET',
 			mode: 'cors'
 		});
-		const result = await response.json();
-		allCards = result.data.cards.card;
+		const { data } = await response.json();
+		allCards = data.cards.card;
 	});
 
 	function handleClick(index) {
@@ -32,7 +32,7 @@
 
 		let cardPicked = 0;
 		do {
-			let pickCard = randomNum(0,allCards.length);
+			let pickCard = randomNum(0, allCards.length);
 			// TODO: do we want duplicates and do we want rarity?
 			if (allCards[pickCard].released == true) {
 				if (cardsOpened.findIndex((x) => parseInt(x.id) === parseInt(allCards[pickCard].id)) < 0) {
@@ -47,18 +47,14 @@
 		console.log(cardsOpened);
 
 		revealed += 1;
-
 	}
 
 	function handleDeal() {
-		
 		if (!hideCards) {
 			hideCards = true;
 			packs--;
 		}
-		
 		if (revealed !== 5) return;
-
 		if (packs === 0) return;
 
 		// reset the displayed cards array and the revealed count
@@ -75,20 +71,48 @@
 <div class="component-ui">
 	<div class="card-pack-container">
 		<div class="card-pack">
-		<img src="/images/CardPack-AnimalsAssemble.png" on:keydown={() => handleDeal()} on:click={() => handleDeal()} alt="Card Pack " class="card-pack-image" />
-		<div>{packs} Packs Remaning</div>
-	</div>
+			<img src="/images/CardPack-AnimalsAssemble.png" on:keydown={() => handleDeal()} on:click={() => handleDeal()} alt="Card Pack " class="card-pack-image" />
+			<div>{packs} Packs Remaning</div>
+		</div>
 		<div class="card-images-container">
 			{#if hideCards}
-			{#each displayedCards as card, index}
-				<img src={card ? card : '/images/cardback-full-animalsassemble.png'} class="card-image" alt={`Card ${index}`} on:keydown={() => handleClick(index)} on:click={() => handleClick(index)} />
-			{/each}
+				{#each displayedCards as card, index}
+					<div class="card-image-container">
+						<img src={card ? card : '/images/cardback-full-animalsassemble.png'} class="card-image" alt={`Card ${index}`} on:keydown={() => handleClick(index)} on:click={() => handleClick(index)} />
+						{#if card}
+							<div class="card-description">{allCards[index].desc}</div>
+							<div class="reroll"><button>Don't Have Card</button></div>
+						{:else}
+							<div class="card-description" />
+							<div class="reroll" />
+						{/if}
+					</div>
+				{/each}
 			{/if}
 		</div>
 	</div>
 </div>
 
 <style>
+	.reroll {
+		margin-bottom: 10px;
+		min-height: 32px;
+	}
+	.reroll button {
+		font-size: 10px;
+		margin-bottom: 10px;
+	}
+	.card-description {
+		text-align: center;
+		max-width: 140px;
+		font-size: 9px;
+		min-height: 40px;
+		max-height: 40px;
+		margin-left: 5px;
+		margin-right: 5px;
+		overflow: hidden;
+		margin-top: -5px;
+	}
 	.card-pack-container {
 		display: flex;
 		flex-direction: row;
@@ -106,23 +130,26 @@
 
 	.card-images-container {
 		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: center;
 		flex-wrap: wrap;
-	
+		justify-content: center;
+	}
+
+	.card-image-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 
 	.card-image {
 		width: 180px;
 		height: auto;
-		margin-right: 10px;
+		margin-bottom: 10px;
 		cursor: pointer;
 	}
 
-	.card-pack  {
+	.card-pack {
 		text-align: center;
-		margin:auto 0px;
+		margin: auto 0px;
 	}
 
 	@media screen and (max-width: 768px) {
