@@ -6,7 +6,7 @@
 	import Header from '../components/header.svelte';
 	import Deck from '../components/deck-view.svelte';
 	import DraftComplete from '../components/draft-complete.svelte';
-	import ArenaPicker from '../components/arena-picker.svelte';
+	import SealedPicker from '../components/sealed-picker.svelte';
 </script>
 
 
@@ -17,8 +17,15 @@
 <div>
 	<Header />
 </div>
+
+{#if cardsDrafted >= 12}
 <div>
 	<Deck />
+</div>
+{/if}
+
+<div>
+	<SealedPicker/>
 </div>
 
 

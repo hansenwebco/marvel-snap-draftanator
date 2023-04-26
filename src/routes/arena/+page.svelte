@@ -11,6 +11,7 @@
 	DECK.subscribe((c) => {
 		cardsDrafted = c.length;
 	});
+	
 </script>
 
 <svelte:head>
