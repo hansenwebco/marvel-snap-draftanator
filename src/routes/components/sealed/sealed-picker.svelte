@@ -4,6 +4,7 @@
 	import { API_URL } from '$lib/store.js';
 	import { DECK } from '$lib/store.js';
 	import { sortCards, randomNum } from '$lib/global.js';
+	import SealedOpened from './sealed-opened.svelte';
 
 	const DATA_URL = get(API_URL);
 	const displayedCards = [null, null, null, null, null];
@@ -13,6 +14,8 @@
 	let packs = 5;
 	let cardsOpened = [];
 	let hideCards = false;
+	let packCards = [null, null, null, null, null];
+	let openComplete = false;
 
 	DECK.subscribe((c) => {
 		cardsDrafted = c.length;
@@ -27,8 +30,14 @@
 		allCards = data.cards.card;
 	});
 
-	function handleClick(index) {
-		if (displayedCards[index] != null || revealed === 5) return;
+	function handleClick(index, reroll) {
+		if ((displayedCards[index] != null || revealed === 5) && !reroll) return;
+
+		if (reroll) {
+			// remove the card already in our hands
+			cardsOpened.splice(cardsOpened.findIndex((x) => parseInt(x.id) === parseInt(packCards[index])),1);
+			revealed--;
+		}
 
 		let cardPicked = 0;
 		do {
@@ -43,6 +52,7 @@
 		} while (cardPicked == 0);
 
 		displayedCards[index] = `https://snapdata-cdn.stonedonkey.com/images/cards/${allCards[cardPicked].id}.webp`;
+		packCards[index] = allCards[cardPicked].id;
 
 		console.log(cardsOpened);
 
@@ -63,25 +73,38 @@
 			displayedCards[index] = null;
 		});
 
+		packCards.fill(null);
+		packCards.forEach((card, index) => {
+			packCards[index] = null;
+		});
+
 		revealed = 0;
 		packs--;
+	}
+
+	function showDrawn() {
+		openComplete = true;
 	}
 </script>
 
 <div class="component-ui">
+	{#if !openComplete}
 	<div class="card-pack-container">
 		<div class="card-pack">
 			<img src="/images/CardPack-AnimalsAssemble.png" on:keydown={() => handleDeal()} on:click={() => handleDeal()} alt="Card Pack " class="card-pack-image" />
 			<div>{packs} Packs Remaning</div>
+			{#if packs == 0 && revealed == 5}
+			<div class="build-deck"><button on:click={() => showDrawn()}>Build Deck</button></div>
+			{/if}
 		</div>
 		<div class="card-images-container">
 			{#if hideCards}
 				{#each displayedCards as card, index}
 					<div class="card-image-container">
-						<img src={card ? card : '/images/cardback-full-animalsassemble.png'} class="card-image" alt={`Card ${index}`} on:keydown={() => handleClick(index)} on:click={() => handleClick(index)} />
+						<img src={card ? card : '/images/cardback-full-animalsassemble.png'} class="card-image" alt={`Card ${index}`} on:keydown={() => handleClick(index, false)} on:click={() => handleClick(index, false)} />
 						{#if card}
 							<div class="card-description">{allCards[index].desc}</div>
-							<div class="reroll"><button>Don't Have Card</button></div>
+							<div class="reroll"><button class="button-reroll" on:keydown={() => handleClick(index, true)} on:click={() => handleClick(index, true)}>Don't Have Card</button></div>
 						{:else}
 							<div class="card-description" />
 							<div class="reroll" />
@@ -91,9 +114,16 @@
 			{/if}
 		</div>
 	</div>
+	{/if}
+	{#if openComplete}
+	<SealedOpened/>
+	{/if}
 </div>
 
 <style>
+	.build-deck {
+		margin-top:15px;
+	}
 	.reroll {
 		margin-bottom: 10px;
 		min-height: 32px;

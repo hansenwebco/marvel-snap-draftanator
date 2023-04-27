@@ -6,7 +6,7 @@
 	import Header from '../components/header.svelte';
 	import Deck from '../components/deck-view.svelte';
 	import DraftComplete from '../components/draft-complete.svelte';
-	import SealedPicker from '../components/sealed-picker.svelte';
+	import SealedPicker from '../components/sealed/sealed-picker.svelte';
 </script>
 
 
