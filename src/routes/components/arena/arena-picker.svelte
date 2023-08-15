@@ -32,7 +32,6 @@
 	function pickCards(redrawCardNum) {
 		
 		// need to remove all click handlers until the images load
-		
 		let totalCards = cards.length - 1;
 		
 		if (redrawCardNum == 1 || redrawCardNum == 0) {
