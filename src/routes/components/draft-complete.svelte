@@ -10,6 +10,7 @@
 	
 	function copyDeckCode() {
 		navigator.clipboard.writeText(deckcode);
+		new Audio('/sounds/pop.mp3').play();
 	}
 </script>
 

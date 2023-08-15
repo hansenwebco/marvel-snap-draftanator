@@ -10,7 +10,7 @@
 	const displayedCards = [null, null, null, null, null];
 	let allCards = [];
 	let revealed = 0;
-	let packs = 3;
+	let packs = 5;
 	let cardsOpened = [];
 	let hideCards = false;
 	let packCards = [null, null, null, null, null];
@@ -23,17 +23,22 @@
 		});
 		const { data } = await response.json();
 		allCards = data.cards.card;
-		
+
 		$DECK = [];
 		$SEALED_CARDS = []; // reset any old data on reloat
 	});
 
 	function handleClick(index, reroll) {
+		new Audio('/sounds/card-open.wav').play();
+
 		if ((displayedCards[index] != null || revealed === 5) && !reroll) return;
 
 		if (reroll) {
 			// remove the card already in our hands
-			cardsOpened.splice(cardsOpened.findIndex((x) => parseInt(x.id) === parseInt(packCards[index])),1);
+			cardsOpened.splice(
+				cardsOpened.findIndex((x) => parseInt(x.id) === parseInt(packCards[index])),
+				1
+			);
 			revealed--;
 		}
 
@@ -44,10 +49,6 @@
 			if (allCards[pickCard].released == true) {
 				if (cardsOpened.findIndex((x) => parseInt(x.id) === parseInt(allCards[pickCard].id)) < 0) {
 					cardsOpened.push(allCards[pickCard]);
-
-					//$SEALED_CARDS.push(allCards[pickCard]);
-					//$SEALED_CARDS = sortCards($SEALED_CARDS);
-
 					cardPicked = pickCard;
 				} else cardPicked = pickCard;
 			}
@@ -66,8 +67,11 @@
 			hideCards = true;
 			packs--;
 		}
-		if (revealed !== 5) return;
+
 		if (packs === 0) return;
+		new Audio('/sounds/pack-open.wav').play();
+
+		if (revealed !== 5) return;
 
 		// reset the displayed cards array and the revealed count
 		displayedCards.fill(null);
@@ -93,39 +97,42 @@
 </script>
 
 {#if !openComplete}
-<div class="component-ui">
-	<div class="card-pack-container">
-		<div class="card-pack">
-			<img src="/images/CardPack-AnimalsAssemble.png" on:keydown={() => handleDeal()} on:click={() => handleDeal()} alt="Card Pack " class="card-pack-image" />
-			<div>{packs} Packs Remaning</div>
-			{#if packs == 0 && revealed == 5}
-			<div class="build-deck"><button class="button" on:click={() => buildDeck()}>Build Your Deck</button></div>
-			{/if}
-		</div>
-		<div class="card-images-container">
-			{#if hideCards}
-				{#each displayedCards as card, index}
-					<div class="card-image-container">
-						<img src={card ? card : '/images/cardback-full-animalsassemble.png'} class="card-image" alt={`Card ${index}`} on:keydown={() => handleClick(index, false)} on:click={() => handleClick(index, false)} />
-						{#if card}
-							<div class="card-description">{allCards[index].desc}</div>
-							<div class="reroll"><button class="button-reroll button button-small" on:keydown={() => handleClick(index, true)} on:click={() => handleClick(index, true)}>Don't Have Card</button></div>
-						{:else}
-							<div class="card-description" />
-							<div class="reroll" />
-						{/if}
-					</div>
-				{/each}
-			{/if}
+	<div class="component-ui">
+		<div class="card-pack-container">
+			<div class="card-pack">
+				<div id="cardtray">
+					{#if packs > 0}
+						<img src="/images/CardPack-AnimalsAssemble.png" on:click={() => handleDeal()} on:click={() => handleDeal()} alt="Card Pack " class="card-pack-image" />
+					{/if}
+				</div>
+				<div id="packs-remaining">{packs} Packs Remaning</div>
+				{#if packs == 0 && revealed == 5}
+					<div class="build-deck"><button class="button" on:click={() => buildDeck()}>Build Your Deck</button></div>
+				{/if}
+			</div>
+			<div class="card-images-container">
+				{#if hideCards}
+					{#each displayedCards as card, index}
+						<div class="card-image-container">
+							<img src={card ? card : '/images/cardback-full-animalsassemble.png'} class="card-image" alt={`Card ${index}`} on:click={() => handleClick(index, false)} />
+							{#if card}
+								<div class="card-description">{allCards[index].desc}</div>
+								<div class="reroll"><button class="button-reroll button button-small" on:keydown={() => handleClick(index, true)} on:click={() => handleClick(index, true)}>Don't Have Card</button></div>
+							{:else}
+								<div class="card-description" />
+								<div class="reroll" />
+							{/if}
+						</div>
+					{/each}
+				{/if}
+			</div>
 		</div>
 	</div>
-	
-</div>
 {/if}
 
 <style>
 	.build-deck {
-		margin-top:15px;
+		margin-top: 15px;
 	}
 	.reroll {
 		margin-bottom: 10px;
@@ -209,6 +216,16 @@
 	}
 
 	.button-small {
-		font-size:8px !important;
+		font-size: 8px !important;
+	}
+
+	#cardtray {
+		background-image: url('/images/cardtray.png');
+		width: 262px;
+		height: 438px;
+	}
+	#packs-remaining {
+		margin-top:-45px;
+		margin-bottom:+45px;
 	}
 </style>
