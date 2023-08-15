@@ -2,49 +2,167 @@
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0');
 
 html {
-    width: 100%;
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
 }
 
 body {
-    background-color: #222;
-    font-family: 'Orbitron', Arial, Helvetica, sans-serif;
-    color: #DDD;
-    background-image: url('/images/background.jpg');
-    background-size: 100% 100%;
+  background-color: #222;
+  font-family: 'Orbitron', Arial, Helvetica, sans-serif;
+  color: #DDD;
+  background-image: url('/images/background.jpg');
+  background-size: 100% 100%;
 
-    /*  this breaks stuff
+  /*  this breaks stuff
         width: 100%;
         margin:0px;
         overflow: hidden;
     */
-    margin: 0px;
-    padding: 0px;
+  margin: 0px;
+  padding: 0px;
 
 }
 
 a {
-    color: white;
+  color: white;
 }
 
 a:hover {
-    color: skyblue;
+  color: skyblue;
 }
 
 .component-ui {
-    background-color: #333;
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 30px;
-    border-radius: 25px;
-    margin-top: 18px;
-    box-sizing: content-box;
-    border: solid 4px #95a2e4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-flow: wrap;
+  background-color: #333;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 30px;
+  border-radius: 25px;
+  margin-top: 18px;
+  box-sizing: content-box;
+  border: solid 4px #95a2e4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: wrap;
+}
+
+
+.pointer {
+  cursor: pointer;
+}
+
+/* CSS */
+
+.button {
+  appearance: none;
+  background-color: #6c757d;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+  box-sizing: border-box;
+  color: #e2e2e2;
+  cursor: pointer;
+  display: inline-block;
+  font-family: 'Orbitron', Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  padding: 6px 16px;
+  position: relative;
+  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+  word-wrap: break-word;
+}
+
+.button:hover {
+  background-color: #565e64;
+  text-decoration: none;
+  transition-duration: 0.1s;
+  color: #e2e2e2;
+}
+
+.button:disabled {
+  background-color: #565e64;
+  border-color: rgba(27, 31, 35, 0.15);
+  color: #959DA5;
+  cursor: default;
+}
+
+.button:active {
+  background-color: #565e64;
+  box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
+  transition: none 0s;
+}
+
+.button:focus {
+  outline: 1px transparent;
+}
+
+.button:before {
+  display: none;
+}
+
+.button:-webkit-details-marker {
+  display: none;
+}
+
+
+
+.button-primary {
+  appearance: none;
+  background-color: #165892;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+  box-sizing: border-box;
+  color: #e2e2e2;
+  cursor: pointer;
+  display: inline-block;
+  font-family: 'Orbitron', Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  padding: 6px 16px;
+  position: relative;
+  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+  word-wrap: break-word;
+}
+
+.button-primary:hover {
+  background-color: #0e4066;
+  text-decoration: none;
+  transition-duration: 0.1s;
+}
+
+.button-primary:disabled {
+  background-color: #565e64;
+  border-color: rgba(27, 31, 35, 0.15);
+  color: #959DA5;
+  cursor: default;
+}
+
+.button-primary:active {
+  background-color: #0e4066;
+  box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
+  transition: none 0s;
+}
+
+.button-primary:focus {
+  outline: 1px transparent;
+}
+
+.button-primary:before {
+  display: none;
+}
+
+.button-primary:-webkit-details-marker {
+  display: none;
 }

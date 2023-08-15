@@ -81,21 +81,21 @@
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<img on:click={cardPicked(cards[pick1])} src={card1Image} alt={card1Alt} />
 		<div class="card-desc" id="card-desc-1">{card1Text}</div>
-		<button on:click={() => pickCards(1)}>Don't Have Card</button>
+		<button class="button" on:click={() => pickCards(1)}>Don't Have Card</button>
 	</div>
 
 	<div class="arena-pick">
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<img on:click={cardPicked(cards[pick2])} src={card2Image} alt={card2Alt} />
 		<div class="card-desc" id="card-desc-2">{card2Text}</div>
-		<button on:click={() => pickCards(2)}>Don't Have Card</button>
+		<button class="button" on:click={() => pickCards(2)}>Don't Have Card</button>
 	</div>
 
 	<div class="arena-pick">
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<img on:click={cardPicked(cards[pick3])} src={card3Image} alt={card3Alt} />
 		<div class="card-desc" id="card-desc-3">{card3Text}</div>
-		<button on:click={() => pickCards(3)}>Don't Have Card</button>
+		<button class="button" on:click={() => pickCards(3)}>Don't Have Card</button>
 	</div>
 </div>
 
@@ -119,4 +119,9 @@
 	img:hover {
 		cursor: pointer;
 	}
+
+	.button {
+		margin-top:3px;
+	}
+	
 </style>

@@ -4,12 +4,13 @@
 	import { API_URL } from '$lib/store.js';
 	import { sortCards, randomNum } from '$lib/global.js';
 	import { SEALED_CARDS } from '$lib/store.js';
+	import { DECK } from '$lib/store.js';
 
 	const DATA_URL = get(API_URL);
 	const displayedCards = [null, null, null, null, null];
 	let allCards = [];
 	let revealed = 0;
-	let packs = 1;
+	let packs = 3;
 	let cardsOpened = [];
 	let hideCards = false;
 	let packCards = [null, null, null, null, null];
@@ -23,6 +24,7 @@
 		const { data } = await response.json();
 		allCards = data.cards.card;
 		
+		$DECK = [];
 		$SEALED_CARDS = []; // reset any old data on reloat
 	});
 
@@ -97,7 +99,7 @@
 			<img src="/images/CardPack-AnimalsAssemble.png" on:keydown={() => handleDeal()} on:click={() => handleDeal()} alt="Card Pack " class="card-pack-image" />
 			<div>{packs} Packs Remaning</div>
 			{#if packs == 0 && revealed == 5}
-			<div class="build-deck"><button on:click={() => buildDeck()}>Build Deck</button></div>
+			<div class="build-deck"><button class="button" on:click={() => buildDeck()}>Build Your Deck</button></div>
 			{/if}
 		</div>
 		<div class="card-images-container">
@@ -107,7 +109,7 @@
 						<img src={card ? card : '/images/cardback-full-animalsassemble.png'} class="card-image" alt={`Card ${index}`} on:keydown={() => handleClick(index, false)} on:click={() => handleClick(index, false)} />
 						{#if card}
 							<div class="card-description">{allCards[index].desc}</div>
-							<div class="reroll"><button class="button-reroll" on:keydown={() => handleClick(index, true)} on:click={() => handleClick(index, true)}>Don't Have Card</button></div>
+							<div class="reroll"><button class="button-reroll button button-small" on:keydown={() => handleClick(index, true)} on:click={() => handleClick(index, true)}>Don't Have Card</button></div>
 						{:else}
 							<div class="card-description" />
 							<div class="reroll" />
@@ -204,5 +206,9 @@
 			margin-right: 0;
 			margin-bottom: 10px;
 		}
+	}
+
+	.button-small {
+		font-size:8px !important;
 	}
 </style>
