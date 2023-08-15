@@ -92,7 +92,7 @@
 	</div>
 
 	<div class="arena-pick">
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<img on:click={cardPicked(cards[pick3])} src={card3Image} alt={card3Alt} />
 		<div class="card-desc" id="card-desc-3">{card3Text}</div>
 		<button on:click={() => pickCards(3)}>Don't Have Card</button>

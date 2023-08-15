@@ -5,6 +5,16 @@
 	import DraftComplete from '../components/draft-complete.svelte';
 	import SealedPicker from '../components/sealed/sealed-picker.svelte';
 	import OpenedCards from '../components/sealed/sealed-opened.svelte';
+
+	
+    import { SEALED_CARDS } from '$lib/store.js';
+	let cardsDrafted = 0;
+	SEALED_CARDS.subscribe((c) => {
+		cardsDrafted = c.length;
+	});
+
+	console.log("drafted", cardsDrafted)
+
 </script>
 
 
@@ -16,22 +26,29 @@
 	<Header />
 </div>
 
+{#if cardsDrafted == 0}
 <div>
 	<SealedPicker/>
 </div>
+{/if}
 
+{#if cardsDrafted > 0}
 <div>
 	<Deck />
 </div>
+{/if}
 
+{#if cardsDrafted > 0}
 <div>
 	<OpenedCards/>
 </div>
+{/if}
 
+{#if cardsDrafted > 10000}
 <div>
 	<DraftComplete />
 </div>
-
+{/if}
 
 <div>
 	<Footer />
