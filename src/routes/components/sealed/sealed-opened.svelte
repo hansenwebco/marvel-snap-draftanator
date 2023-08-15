@@ -3,12 +3,26 @@
     import { SEALED_CARDS } from '$lib/store.js';
     import { DECK } from '$lib/store.js';
 	import { API_URL } from '$lib/store.js';
+    import { DECK_EVENT } from '$lib/store.js';
     import {sortCards } from '$lib/global.js';
     let cdn = get(API_URL);
 
     let cards;
     SEALED_CARDS.subscribe((c) => {
         cards = c;
+    });
+
+    // listens to event generated via the store from the deck-view.svlete component, not sure this is ideal but for now good
+    DECK_EVENT.subscribe((cid) => {
+        let index = $DECK.findIndex(a=>a.id === cid);
+        if (index >= 0) {
+            let card = $DECK[index];
+            $DECK.splice(index,1);
+            DECK.set($DECK);
+
+            $SEALED_CARDS.push(card);
+            SEALED_CARDS.set(sortCards($SEALED_CARDS));
+        }
     });
 
     function cardPicked(card) {
@@ -18,8 +32,7 @@
 
         // add to deck
         $DECK.push(card);
-		$DECK = sortCards($DECK);
-		DECK.set($DECK);
+		DECK.set(sortCards($DECK));
 	}
 </script>
 

@@ -5,7 +5,6 @@
 	import DraftComplete from '../components/draft-complete.svelte';
 	import SealedPicker from '../components/sealed/sealed-picker.svelte';
 	import OpenedCards from '../components/sealed/sealed-opened.svelte';
-
 	
     import { SEALED_CARDS } from '$lib/store.js';
 	let cardsDrafted = 0;
@@ -13,7 +12,9 @@
 		cardsDrafted = c.length;
 	});
 
-	console.log("drafted", cardsDrafted)
+	function removeCard(card) {
+		console.log(card.detail);
+	}
 
 </script>
 
