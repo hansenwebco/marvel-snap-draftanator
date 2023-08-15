@@ -1,5 +1,5 @@
 <div id="heading">
-	<a href="/"><img id="header-image" alt="Marvel Snap Draftanator" src="/images/site-header.png" /></a>
+	<a data-sveltekit-reload href="/"><img id="header-image" alt="Marvel Snap Draftanator" src="/images/site-header.png" /></a>
 </div>
 
 <style>
