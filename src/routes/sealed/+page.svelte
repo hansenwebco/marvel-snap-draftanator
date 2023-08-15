@@ -1,12 +1,10 @@
 <script>
-	
-	let cardsDrafted = 0;
-
 	import Footer from '../components/footer.svelte';
 	import Header from '../components/header.svelte';
 	import Deck from '../components/deck-view.svelte';
 	import DraftComplete from '../components/draft-complete.svelte';
 	import SealedPicker from '../components/sealed/sealed-picker.svelte';
+	import OpenedCards from '../components/sealed/sealed-opened.svelte';
 </script>
 
 
@@ -18,22 +16,22 @@
 	<Header />
 </div>
 
-{#if cardsDrafted >= 12}
-<div>
-	<Deck />
-</div>
-{/if}
-
 <div>
 	<SealedPicker/>
 </div>
 
+<div>
+	<Deck />
+</div>
 
-{#if cardsDrafted >= 12}
-	<div>
-		<DraftComplete />
-	</div>
-{/if}
+<div>
+	<OpenedCards/>
+</div>
+
+<div>
+	<DraftComplete />
+</div>
+
 
 <div>
 	<Footer />

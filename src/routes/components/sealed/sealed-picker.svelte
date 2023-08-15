@@ -4,7 +4,6 @@
 	import { API_URL } from '$lib/store.js';
 	import { DECK } from '$lib/store.js';
 	import { sortCards, randomNum } from '$lib/global.js';
-	import SealedOpened from './sealed-opened.svelte';
 
 	const DATA_URL = get(API_URL);
 	const displayedCards = [null, null, null, null, null];
@@ -114,9 +113,6 @@
 			{/if}
 		</div>
 	</div>
-	{/if}
-	{#if openComplete}
-	<SealedOpened/>
 	{/if}
 </div>
 
