@@ -11,7 +11,7 @@
 	<br /><br />
 	<a target="_blank" rel="noreferrer" href="https://github.com/hansenwebco/marvel-snap-draft">Github</a> -
 	<a target="_blank" rel="noreferrer" href="https://github.com/hansenwebco/marvel-snap-draft/issues">Bugs</a> -
-	<span id="version" >3.0.0</span>
+	<span id="version">3.0.0</span>
 </div>
 
 <style>

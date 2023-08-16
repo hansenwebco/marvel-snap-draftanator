@@ -5,9 +5,6 @@
 </script>
 
 <svelte:head>
-	<title>Marvel Snap - Draftanator</title>
-
-    <!-- Primary Meta Tags -->
     <title>Marvel Snap! Draftanator - Draft Marvel Snap Decks - Sealed and Arena Formats</title>
     <meta name="title" content="Marvel Snap! Draftanator - Draft Marvel Snap Decks - Sealed and Arena Formats">
     <meta name="description" content="The original Marvel Snap site for drafting decks.  Mavel Snap Draftanator supports sealed and arena formats and even allows you to draft decks with friends!">
@@ -25,7 +22,6 @@
     <meta property="twitter:title" content="Marvel Snap! Draftanator - Draft Marvel Snap Decks - Sealed and Arena Formats">
     <meta property="twitter:description" content="The original Marvel Snap site for drafting decks.  Mavel Snap Draftanator supports sealed and arena formats and even allows you to draft decks with friends!">
     <meta property="twitter:image" content="https://www.marvelsnapdraft.com/images/preview.png">
-
 </svelte:head>
 
 <Header />
