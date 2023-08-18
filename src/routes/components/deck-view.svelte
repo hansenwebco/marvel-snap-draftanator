@@ -5,6 +5,8 @@
 	import { DECK_EVENT } from '$lib/store.js';
 	import PowerTable from '../components/power-table.svelte';
 
+	export let showPowerTable = true;
+
 	let cdn = get(API_URL);
 	let cards;
 
@@ -30,9 +32,11 @@
 			{/if}
 		{/each}
 	</div>
+	{#if showPowerTable}
 	<div>
 		<PowerTable />
 	</div>
+	{/if}
 </div>
 
 <style>
