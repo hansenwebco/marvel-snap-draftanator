@@ -5,6 +5,7 @@
 	import DeckHost from '../components/deck-view.svelte';
 	import DeckGuest from '../components/deck-view.svelte';
 	import { io } from 'socket.io-client';
+	import {sortCards } from '$lib/global.js';
 
 	let roomId = '';
 	let gameState = '';
@@ -110,7 +111,7 @@
 			<td align="center">Opponent's Deck<br /><br /></td>
 		</tr>
 		<tr>
-			<td align="center" style="min-width:400px;width:400px;"><DeckHost showPowerTable={false} /></td>
+			<td align="center" style="min-width:400px;width:400px;"><DeckHost cards={mode == modes.Host ?  sortCards(gameState.deck_host) :  sortCards(gameState.deck_guest)} showPowerTable={false} /></td>
 			{#if gameState.current_card != 'undefined'}
 			<td align="center">
 				<img alt="" src="https://snapdata-cdn.stonedonkey.com/images/cards/{gameState.current_card.id}.webp" />
@@ -119,7 +120,7 @@
 			{:else}
 			<td align="center"><img alt="" src="https://snapdata-cdn.stonedonkey.com/images/cards/1.webp" /></td>
 			{/if}
-			<td align="center" style="min-width:400px;width:400px;"><DeckGuest showPowerTable={false} /></td>
+			<td align="center" style="min-width:400px;width:400px;"><DeckGuest cards={mode == modes.Host ? sortCards(gameState.deck_guest) : sortCards(gameState.deck_host)} showPowerTable={false} /></td>
 		</tr>
 		<tr>
 			<td align="center">
