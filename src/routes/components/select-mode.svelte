@@ -12,8 +12,8 @@
 	</div>
 
 	<div class="mode">
-		<a href="/bid"><span id="btn-sealed" class="material-symbols-outlined icon mode-sealed">batch_prediction</span><br /><br /></a>
-		<a class="btn btn-primary mode-sealed" id="btn-sealed-2">Bid Mode</a>
+		<a href="/bid"><span id="btn-sealed" class="material-symbols-outlined icon mode-sealed">gavel</span><br /><br /></a>
+		<a class="btn btn-primary mode-sealed" id="btn-sealed-2">Auction Mode</a>
 		<div class="start-text">Bid on cards and outsmart your opponent in this realtime draft!</div>
 	</div>
 

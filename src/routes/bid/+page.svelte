@@ -9,8 +9,8 @@
 	let roomId = '';
 	let gameState = '';
 	let socket;
-	let mode;
-	let debug = false;
+	let mode = '';
+	let debug = true;
 
 	const modes = {
 		Host: 'Host',
@@ -21,12 +21,7 @@
 	const SIGNALIO_SERVER = 'ws://localhost:3000';
 	socket = io(SIGNALIO_SERVER);
 
-	onMount(async () => {
-		// socket.on('init', async (arg) => {
-		// 	gameState = arg;
-		//     roomId = arg.game_id;
-		// });
-	});
+	onMount(async () => {});
 
 	socket.on('syncGameState', (serverGameState) => {
 		console.log('sync game state');
@@ -39,15 +34,25 @@
 		mode = modes.Host;
 	}
 	function joinGame() {
-		socket.emit('joinGame', roomId);
+		var result = socket.emit('joinGame', roomId);
 		mode = modes.Guest;
 	}
 
 	function bid(bidAmount) {
-		if (mode === modes.Host) gameState.bid_host = gameState.bid_host + bidAmount;
-		else gameState.bid_guest = gameState.bid_guest + bidAmount;
+		if (mode === modes.Host) {
+			gameState.bid_host = gameState.bid_host + bidAmount;
+		} else {
+			gameState.bid_guest = gameState.bid_guest + bidAmount;
+		}
 
-		socket.emit('updateGame', { mode: mode, bid: bidAmount, roomId: roomId });
+		socket.emit('updateBid', { mode: mode, bid: bidAmount, roomId: roomId });
+	}
+	function readyToDraft() {
+		socket.emit('readyGame',{mode: mode, gameId: roomId});
+	}
+
+	function copyGameId() {
+		navigator.clipboard.writeText(document.getElementById('game-code').value);
 	}
 </script>
 
@@ -74,63 +79,90 @@
 <div>
 	<Header />
 </div>
-
-<table style="margin:auto;">
-	<tr>
-		<td align="center">Your Deck<br /><br /></td>
-		<td align="center" >Round 1</td>
-		<td align="center">Opponent's Deck<br /><br /></td>
-	</tr>
-	<tr>
-		<td align="center" style="min-width:400px;width:400px;"><DeckHost showPowerTable={false} /></td>
-		<td align="center"><img alt="" src="https://snapdata-cdn.stonedonkey.com/images/cards/53.webp" /></td>
-		<td align="center" style="min-width:400px;width:400px;"><DeckGuest showPowerTable={false} /></td>
-	</tr>
-	<tr>
-        <td align="center">
-            <div class="component-ui" style="min-height: 125px;">
-            Your Gold: 10<br/><br/>
-            </div>
-        </td>
-		<td align="center">
-			<div class="component-ui"  style="min-height: 125px;">
-                <div style="clear:both;width:100%;">
-                    Your Bid: 4<br/>
-                </div>
-                
-                <button class="round">-5</button>
-				<button class="round">-1</button>
-				<button class="round">0</button>
-				<button class="round">+1</button>
-				<button class="round">+5</button>
-
-                <div style="clear:both;width:100%;margin-top:20px">
-					<button>Lock Bid</button>
-				</div>
+{#if gameState.client_count == undefined || gameState.client_count < 2}
+	<div class="start-container">
+		<div class="component-ui start-option">
+			<div class="start-directions">To host a draft click "Create Draft" below and provide the id to the other participant.</div>
+			{#if gameState.game_id == null}
+				<input type="button" class="button" on:click={createGame} value="Create Draft" />
+			{:else}
+				<input id="game-code" class="game-code-input" onclick="this.select();" bind:value={gameState.game_id} type="text" /><br /><br />
+				<input type="button" class="button" on:click={copyGameId} value="Copy Code" />
+				<br />
+				Waiting on opponent to connect...
+			{/if}
+		</div>
+		{#if mode != modes.Host}
+			<div class="component-ui start-option">
+				<div class="start-directions">Enter the draft code from from the user who created the draft and click "Join Draft" to begin.</div>
+				<input id="roomId" class="game-code-input" onclick="this.select();" bind:value={roomId} type="text" /><br /><br />
+				<input type="button" class="button" on:click={joinGame} value="Join Draft" />
 			</div>
-		</td>
-        <td align="center" class="component-ui"  style="min-height: 125px;">
-            Opponent Gold: 10<br/><br/>
-            Status: Bidding
-        </td>
-	</tr>
-</table>
-
-{#if mode != undefined}
-	<div class="component-ui">
-		<input type="button" on:click={createGame} value="Create Draft" />
+		{/if}
 	</div>
+{/if}
 
-	<div class="component-ui">
-		<input id="roomId" bind:value={roomId} type="text" />
-		<input type="button" on:click={joinGame} value="Join Draft" />
-	</div>
+{#if gameState.client_count == 2}
+	<table  style="margin:auto;">
+		<tr>
+			<td align="center">Your Deck<br /><br /></td>
+			<td align="center">Round 1 - Timer: {gameState.timer}</td>
+			<td align="center">Opponent's Deck<br /><br /></td>
+		</tr>
+		<tr>
+			<td align="center" style="min-width:400px;width:400px;"><DeckHost showPowerTable={false} /></td>
+			{#if gameState.current_card != 'undefined'}
+			<td align="center">
+				<img alt="" src="https://snapdata-cdn.stonedonkey.com/images/cards/{gameState.current_card.id}.webp" />
+				<div id="card-desc">{gameState.current_card.desc}</div>
+			</td>	
+			{:else}
+			<td align="center"><img alt="" src="https://snapdata-cdn.stonedonkey.com/images/cards/1.webp" /></td>
+			{/if}
+			<td align="center" style="min-width:400px;width:400px;"><DeckGuest showPowerTable={false} /></td>
+		</tr>
+		<tr>
+			<td align="center">
+				<div class="component-ui" style="min-height: 125px;">
+					{#if gameState.ready_guest == true && gameState.ready_host == true}
+						<div style="clear:both;width:100%;">
+							Your Gold: {mode == modes.Host ? gameState.gold_host : gameState.gold_guest} - Your Bid: {mode == modes.Host ? gameState.bid_host : gameState.bid_guest}<br /><br />
+						</div>
+						<button on:click={() => bid(1)} class="round">+1</button>
+						<button on:click={() => bid(3)} class="round">+3</button>
+						<button on:click={() => bid(5)} class="round">+5</button>
+						<div style="clear:both;width:100%;margin-top:20px">
+							<button class="button">Pass</button>
+						</div>
+					{:else}
+						<input type="button" on:click={readyToDraft} class="button" value="Ready to Draft!" />
+					{/if}
+				</div>
+			</td>
+			<td align="center">
+				<div class="component-ui" style="min-height: 125px;">
+					<div>Current Bid</div>
+					<div class="current-bid">{gameState.bid_host > gameState.bid_guest ? gameState.bid_host : gameState.bid_guest}</div>
+				</div>
+			</td>
+			<td align="center" class="component-ui" style="min-height: 125px;">
+				{#if gameState.ready_guest == true && gameState.ready_host == true}
+					Opponent Gold: {mode == modes.Host ?  gameState.gold_guest : gameState.gold_host}<br /><br />
+				{:else}
+					{#if mode == modes.Host}
+						Status: {gameState.ready_guest == true ? 'Ready' : 'Not Ready'}
+					{:else if mode == modes.Guest}
+						Status: {gameState.ready_host == true ? 'Ready' : 'Not Ready'}
+					{/if}
+				{/if}
+			</td>
+		</tr>
+	</table>
 
+	<!--
 	<div class="component-ui">
 		<div style="width: 100%;">
-			Mode: {mode}
-			{modes.Host}
-			{mode == mode.Host}<br />
+			Mode: {mode}<br />
 			Your Gold : {mode == modes.Host ? gameState.gold_host : gameState.gold_guest}<br />
 			Your Bid : {mode == modes.Host ? gameState.bid_host : gameState.bid_guest}<br /><br />
 		</div>
@@ -139,22 +171,54 @@
 			<input type="button" on:click={() => bid(1)} value="Bid Up" />
 		</div>
 	</div>
-	<div />
+	-->
 {/if}
 
 {#if debug}
-	<div>
-		ID: <input type="text" value={gameState.game_id} onclick="this.select()" /><br />
-		Mode: {mode}<br />
-		JSON: {JSON.stringify(gameState)};
+	<br/><br/>
+	<div style="font-size:10px;width:90%;margin:auto;background:#222;border:solid 1px #222;padding:20px;border-radius:10px;">
+		Mode: {mode}<br /><br />
+		<textarea style="width:90%;height:200px;background:#333;border-radius:10px;padding:5px;font-size:10px;color:white;">{JSON.stringify(gameState, null, 2)};</textarea>
 	</div>
 {/if}
-
 <div>
 	<Footer />
 </div>
 
 <style>
+	.start-container {
+		margin-top: 50px;
+		display: inline-flex;
+		flex-flow: wrap;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+	}
+	.start-option {
+		width: 300px;
+		text-align: center;
+		margin: 20px;
+	}
+
+	#card-desc {
+		font-size:10px;
+		width:200px;
+	}
+	.game-code-input {
+		width: 100%;
+		border-radius: 4px;
+		font-size: 12px;
+		padding: 5px;
+		margin-right: 0px;
+		border: none;
+		text-align: center;
+	}
+	.start-directions {
+		font-size: 13px;
+		text-align: left;
+		margin-bottom: 20px;
+	}
+
 	button.round {
 		background-color: #48abe0;
 		color: white;
@@ -167,5 +231,9 @@
 		border-radius: 50%;
 		margin-right: 5px;
 		margin-left: 5px;
+	}
+	.current-bid {
+		font-size: 55px;
+		width: 100%;
 	}
 </style>
