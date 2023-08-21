@@ -5,13 +5,14 @@
 	import DeckHost from '../components/deck-view.svelte';
 	import DeckGuest from '../components/deck-view.svelte';
 	import { io } from 'socket.io-client';
-	import {sortCards } from '$lib/global.js';
+	import { sortCards } from '$lib/global.js';
+	import { buildDeckCode } from '../../lib/global';
 
 	let roomId = '';
 	let gameState = '';
 	let socket;
 	let mode = '';
-	let debug = true;
+	let debug = false;
 
 	const modes = {
 		Host: 'Host',
@@ -49,11 +50,11 @@
 		socket.emit('updateBid', { mode: mode, bid: bidAmount, roomId: roomId });
 	}
 	function readyToDraft() {
-		socket.emit('readyGame',{mode: mode, gameId: roomId});
+		socket.emit('readyGame', { mode: mode, gameId: roomId });
 	}
 
-	function copyGameId() {
-		navigator.clipboard.writeText(document.getElementById('game-code').value);
+	function copyGameId(elm) {
+		navigator.clipboard.writeText(document.getElementById(elm).value);
 	}
 </script>
 
@@ -88,7 +89,7 @@
 				<input type="button" class="button" on:click={createGame} value="Create Draft" />
 			{:else}
 				<input id="game-code" class="game-code-input" onclick="this.select();" bind:value={gameState.game_id} type="text" /><br /><br />
-				<input type="button" class="button" on:click={copyGameId} value="Copy Code" />
+				<input type="button" class="button" on:click={copyGameId("game-code")} value="Copy Code" />
 				<br />
 				Waiting on opponent to connect...
 			{/if}
@@ -104,28 +105,32 @@
 {/if}
 
 {#if gameState.client_count == 2}
-	<table  style="margin:auto;">
+	<table style="margin:auto;">
 		<tr>
 			<td align="center">Your Deck<br /><br /></td>
 			<td align="center">Round 1 - Timer: {gameState.timer}</td>
 			<td align="center">Opponent's Deck<br /><br /></td>
 		</tr>
 		<tr>
-			<td align="center" style="min-width:400px;width:400px;"><DeckHost cards={mode == modes.Host ?  sortCards(gameState.deck_host) :  sortCards(gameState.deck_guest)} showPowerTable={false} /></td>
+			<td align="center" style="min-width:400px;width:400px;"><DeckHost cards={mode == modes.Host ? sortCards(gameState.deck_host) : sortCards(gameState.deck_guest)} showPowerTable={false} /></td>
 			{#if gameState.current_card != 'undefined'}
-			<td align="center">
-				<img alt="" src="https://snapdata-cdn.stonedonkey.com/images/cards/{gameState.current_card.id}.webp" />
-				<div id="card-desc">{gameState.current_card.desc}</div>
-			</td>	
+				<td align="center">
+					<img alt="" src="https://snapdata-cdn.stonedonkey.com/images/cards/{gameState.current_card.id}.webp" />
+					<div id="card-desc">{gameState.current_card.desc}</div>
+				</td>
 			{:else}
-			<td align="center"><img alt="" src="https://snapdata-cdn.stonedonkey.com/images/cards/1.webp" /></td>
+				<td align="center"><img alt="" src="https://snapdata-cdn.stonedonkey.com/images/cards/1.webp" /></td>
 			{/if}
 			<td align="center" style="min-width:400px;width:400px;"><DeckGuest cards={mode == modes.Host ? sortCards(gameState.deck_guest) : sortCards(gameState.deck_host)} showPowerTable={false} /></td>
 		</tr>
 		<tr>
 			<td align="center">
 				<div class="component-ui" style="min-height: 125px;">
-					{#if gameState.ready_guest == true && gameState.ready_host == true}
+					{#if (mode == modes.Host && gameState.deck_host.length >= 2) || (mode == modes.Guest && gameState.deck_guest.length >= 2)}
+						Draft Complete
+						<input id="deck-id-left" class="game-code-input" value={buildDeckCode(mode == modes.Host ? gameState.deck_host : gameState.deck_guest)} onclick="this.select();" type="text" />
+						<input type="button" class="button" on:click={copyGameId("deck-id-left")} value="Copy Deck Code" />
+					{:else if gameState.ready_guest == true && gameState.ready_host == true}
 						<div style="clear:both;width:100%;">
 							Your Gold: {mode == modes.Host ? gameState.gold_host : gameState.gold_guest} - Your Bid: {mode == modes.Host ? gameState.bid_host : gameState.bid_guest}<br /><br />
 						</div>
@@ -147,36 +152,26 @@
 				</div>
 			</td>
 			<td align="center" class="component-ui" style="min-height: 125px;">
-				{#if gameState.ready_guest == true && gameState.ready_host == true}
-					Opponent Gold: {mode == modes.Host ?  gameState.gold_guest : gameState.gold_host}<br /><br />
-				{:else}
-					{#if mode == modes.Host}
-						Status: {gameState.ready_guest == true ? 'Ready' : 'Not Ready'}
-					{:else if mode == modes.Guest}
-						Status: {gameState.ready_host == true ? 'Ready' : 'Not Ready'}
-					{/if}
+				{#if (mode == modes.Guest && gameState.deck_host.length >= 2) || (mode == modes.Host && gameState.deck_guest.length >= 2)}
+					Draft Complete
+					<input id="deck-id-right" class="game-code-input" value={buildDeckCode(mode == modes.Guest ? gameState.deck_host : gameState.deck_guest)} onclick="this.select();" type="text" />
+					<input type="button" class="button" on:click={copyGameId("deck-id-right")} value="Copy Deck Code" />
+				{:else if gameState.ready_guest == true && gameState.ready_host == true}
+					Opponent Gold: {mode == modes.Host ? gameState.gold_guest : gameState.gold_host}<br /><br />
+				{:else if mode == modes.Host}
+					Status: {gameState.ready_guest == true ? 'Ready' : 'Not Ready'}
+				{:else if mode == modes.Guest}
+					Status: {gameState.ready_host == true ? 'Ready' : 'Not Ready'}
 				{/if}
 			</td>
 		</tr>
 	</table>
 
-	<!--
-	<div class="component-ui">
-		<div style="width: 100%;">
-			Mode: {mode}<br />
-			Your Gold : {mode == modes.Host ? gameState.gold_host : gameState.gold_guest}<br />
-			Your Bid : {mode == modes.Host ? gameState.bid_host : gameState.bid_guest}<br /><br />
-		</div>
-		<div>
-			<input type="button" on:click={() => bid(-1)} value="Bid Down" />
-			<input type="button" on:click={() => bid(1)} value="Bid Up" />
-		</div>
-	</div>
-	-->
+
 {/if}
 
 {#if debug}
-	<br/><br/>
+	<br /><br />
 	<div style="font-size:10px;width:90%;margin:auto;background:#222;border:solid 1px #222;padding:20px;border-radius:10px;">
 		Mode: {mode}<br /><br />
 		<textarea style="width:90%;height:200px;background:#333;border-radius:10px;padding:5px;font-size:10px;color:white;">{JSON.stringify(gameState, null, 2)};</textarea>
@@ -202,8 +197,8 @@
 	}
 
 	#card-desc {
-		font-size:10px;
-		width:200px;
+		font-size: 10px;
+		width: 200px;
 	}
 	.game-code-input {
 		width: 100%;
