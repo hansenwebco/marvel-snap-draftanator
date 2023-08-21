@@ -26,9 +26,9 @@
 	onMount(async () => {});
 
 	socket.on('syncGameState', (serverGameState) => {
-		console.log('sync game state');
 		roomId = roomId = serverGameState.game_id;
-		gameState = serverGameState;
+		if (gameState != serverGameState)
+			gameState = serverGameState;
 	});
 
 	function createGame() {
@@ -113,20 +113,20 @@
 		</tr>
 		<tr>
 			<td align="center" style="min-width:400px;width:400px;"><DeckHost cards={mode == modes.Host ? sortCards(gameState.deck_host) : sortCards(gameState.deck_guest)} showPowerTable={false} /></td>
-			{#if gameState.current_card != 'undefined'}
+			{#if gameState.current_card.id !== undefined}
 				<td align="center">
 					<img alt="" src="https://snapdata-cdn.stonedonkey.com/images/cards/{gameState.current_card.id}.webp" />
 					<div id="card-desc">{gameState.current_card.desc}</div>
 				</td>
 			{:else}
-				<td align="center"><img alt="" src="https://snapdata-cdn.stonedonkey.com/images/cards/1.webp" /></td>
+				<td align="center"><img alt="" src="/images/cardback.webp" /></td>
 			{/if}
 			<td align="center" style="min-width:400px;width:400px;"><DeckGuest cards={mode == modes.Host ? sortCards(gameState.deck_guest) : sortCards(gameState.deck_host)} showPowerTable={false} /></td>
 		</tr>
 		<tr>
 			<td align="center">
 				<div class="component-ui" style="min-height: 125px;">
-					{#if (mode == modes.Host && gameState.deck_host.length >= 2) || (mode == modes.Guest && gameState.deck_guest.length >= 2)}
+					{#if (mode == modes.Host && gameState.deck_host.length >= 12) || (mode == modes.Guest && gameState.deck_guest.length >= 12)}
 						Draft Complete
 						<input id="deck-id-left" class="game-code-input" value={buildDeckCode(mode == modes.Host ? gameState.deck_host : gameState.deck_guest)} onclick="this.select();" type="text" />
 						<input type="button" class="button" on:click={copyGameId("deck-id-left")} value="Copy Deck Code" />
@@ -152,7 +152,7 @@
 				</div>
 			</td>
 			<td align="center" class="component-ui" style="min-height: 125px;">
-				{#if (mode == modes.Guest && gameState.deck_host.length >= 2) || (mode == modes.Host && gameState.deck_guest.length >= 2)}
+				{#if (mode == modes.Guest && gameState.deck_host.length >= 12) || (mode == modes.Host && gameState.deck_guest.length >= 12)}
 					Draft Complete
 					<input id="deck-id-right" class="game-code-input" value={buildDeckCode(mode == modes.Guest ? gameState.deck_host : gameState.deck_guest)} onclick="this.select();" type="text" />
 					<input type="button" class="button" on:click={copyGameId("deck-id-right")} value="Copy Deck Code" />

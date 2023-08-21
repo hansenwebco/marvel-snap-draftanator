@@ -166,3 +166,9 @@ a:hover {
 .button-primary:-webkit-details-marker {
   display: none;
 }
+
+.tippy-content {
+  font-size: 10px;
+  margin: auto;
+  text-align: center;
+}
