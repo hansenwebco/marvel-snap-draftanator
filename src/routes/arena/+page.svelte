@@ -8,8 +8,10 @@
 	import { DECK } from '$lib/store.js';
 
 	let cardsDrafted = 0;
+	let cards = [];
 	DECK.subscribe((c) => {
 		cardsDrafted = c.length;
+		cards = c;
 	});
 	
 </script>
@@ -38,7 +40,7 @@
 	<Header />
 </div>
 <div>
-	<Deck />
+	<Deck cards={cards} />
 </div>
 
 {#if cardsDrafted < 12}

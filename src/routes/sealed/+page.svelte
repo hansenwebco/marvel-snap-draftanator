@@ -5,12 +5,18 @@
 
 	import SealedPicker from '../components/sealed/sealed-picker.svelte';
 	import OpenedCards from '../components/sealed/sealed-opened.svelte';
-
+	import { DECK } from '$lib/store.js';
 	import { SEALED_CARDS } from '$lib/store.js';
 
 	let cardsDrafted = 0;
 	SEALED_CARDS.subscribe((c) => {
 		cardsDrafted = c.length;
+		console.log(c);
+	});
+
+	let cards = [];
+	DECK.subscribe((c) => {
+		cards = c;
 	});
 </script>
 
@@ -46,7 +52,7 @@
 
 {#if cardsDrafted > 0}
 	<div>
-		<Deck />
+		<Deck cards={cards} />
 	</div>
 {/if}
 
