@@ -12,9 +12,10 @@
 	let gameState = '';
 	let socket;
 	let mode = '';
-	let debug = true;
-	let deckSize = 2;
+	let debug = false;
+	let deckSize = 12;
 	let card_passes = 3;
+	let gameStarted = false;
 
 	const modes = {
 		Host: 'Host',
@@ -30,6 +31,10 @@
 	socket.on('syncGameState', (serverGameState) => {
 		roomId = roomId = serverGameState.game_id;
 		if (gameState != serverGameState) gameState = serverGameState;
+		if (gameStarted == false && serverGameState.client_count >= 2) {
+			console.log('game started');
+			gameStarted = true;
+		}
 	});
 
 	function createGame() {
@@ -47,7 +52,7 @@
 		}
 	}
 	function dontHaveCard() {
-			var result = socket.emit('skipCard', roomId);
+		var result = socket.emit('skipCard', roomId);
 	}
 	function takeCard() {
 		var result = socket.emit('takeCard', roomId);
@@ -94,16 +99,16 @@
 <div>
 	<Header />
 </div>
-{#if gameState.client_count == undefined || gameState.client_count < 2}
+{#if gameStarted == false && (gameState.client_count == undefined || gameState.client_count < 2)}
 	<div class="start-container">
 		<div class="component-ui start-option">
 			{#if gameState.game_id == null}
 				<div class="start-directions">To host a draft click "Create Draft" below and provide the id to the other participant.</div>
 				<input type="button" class="button" on:click={createGame} value="Create Draft" />
 			{:else}
-				<div class="start-directions">Give the code below to your oppoent and they can enter it in the "Join Draft" dialog.</div>
+				<div class="start-directions">Give the code below to your opponent and they can enter it in the "Join Draft" dialog.</div>
 				<input id="game-code" class="game-code-input" onclick="this.select();" bind:value={gameState.game_id} type="text" /><br /><br />
-				<input type="button" class="button" on:click={copyGameId('game-code')} value="Copy Code" />
+				<input type="button" class="button" on:click={()=>copyGameId('game-code')} value="Copy Code" />
 				<br />
 				Waiting on opponent to connect...
 			{/if}
@@ -115,6 +120,17 @@
 				<input type="button" class="button" on:click={joinGame} value="Join Draft" />
 			</div>
 		{/if}
+	</div>
+{:else if gameStarted == true && gameState.client_count < 2}
+	<div class="start-container">
+		<div class="component-ui start-option" style="width:500px;">
+			<div class="start-directions">
+				We lost connection to your opponent, they can rejoin the game by with the code below in the "Join Draft" dialog.<br/><br/>
+			</div>
+			<input id="game-code-reconnect" class="game-code-input" onclick="this.select();" bind:value={gameState.game_id} type="text" /><br /><br /><br/>
+			<input type="button" class="button" on:click={()=>copyGameId('game-code-reconnect')} value="Copy Code" />
+			<br />
+		</div>
 	</div>
 {/if}
 
