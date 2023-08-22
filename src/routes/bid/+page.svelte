@@ -41,7 +41,13 @@
 		mode = modes.Guest;
 	}
 	function skipCard() {
-		var result = socket.emit('skipCard', roomId);
+		card_passes--;
+		if (card_passes > 0) {
+			var result = socket.emit('skipCard', roomId);
+		}
+	}
+	function dontHaveCard() {
+			var result = socket.emit('skipCard', roomId);
 	}
 	function takeCard() {
 		var result = socket.emit('takeCard', roomId);
@@ -91,10 +97,11 @@
 {#if gameState.client_count == undefined || gameState.client_count < 2}
 	<div class="start-container">
 		<div class="component-ui start-option">
-			<div class="start-directions">To host a draft click "Create Draft" below and provide the id to the other participant.</div>
 			{#if gameState.game_id == null}
+				<div class="start-directions">To host a draft click "Create Draft" below and provide the id to the other participant.</div>
 				<input type="button" class="button" on:click={createGame} value="Create Draft" />
 			{:else}
+				<div class="start-directions">Give the code below to your oppoent and they can enter it in the "Join Draft" dialog.</div>
 				<input id="game-code" class="game-code-input" onclick="this.select();" bind:value={gameState.game_id} type="text" /><br /><br />
 				<input type="button" class="button" on:click={copyGameId('game-code')} value="Copy Code" />
 				<br />
@@ -124,6 +131,7 @@
 				<td align="center">
 					<img alt="" src="https://snapdata-cdn.stonedonkey.com/images/cards/{gameState.current_card.id}.webp" />
 					<div id="card-desc">{gameState.current_card.desc}</div>
+					<button class="button" style="font-size:10px;margin-top:5px;" on:click={dontHaveCard}>Don't Have Card</button>
 				</td>
 			{:else}
 				<td align="center"><img alt="" src="/images/cardback.webp" /></td>
@@ -134,14 +142,19 @@
 			<td align="center">
 				<div class="component-ui" style="min-height: 125px;">
 					{#if mode == modes.Host && gameState.deck_guest.length >= deckSize && gameState.deck_host.length < deckSize}
-						 <div>
-							Finish Draft <br/> You Can Pass {card_passes} More Times <br/>
-							<span style="font-size:10px">(if the timer runs out it will take card automatically)</span><br/>
+						<div>
+							<!-- guest finished host has to finish now -->
+							Finish Draft <br /> You Can Pass {card_passes} More Times <br />
+							<span style="font-size:10px">(if the timer runs out it will take card automatically)</span><br />
 						</div>
-						<div><button class="button" on:click={skipCard}>Pass</button>&nbsp;&nbsp;<button on:click={takeCard} class="button">Take Card</button></div>
+						<div><button class="button" disabled={card_passes <= 0} on:click={skipCard}>Pass</button>&nbsp;&nbsp;<button on:click={takeCard} class="button">Take Card</button></div>
 					{:else if mode == modes.Guest && gameState.deck_host.length >= deckSize && gameState.deck_guest.length < deckSize}
-						Finish Draft Mode Guest<br/>
-						<button class="button">Pass</button> <button class="button">Take Card</button>
+						<!-- host finished guest has to finish now-->
+						<div>
+							Finish Draft <br /> You Can Pass {card_passes} More Times <br />
+							<span style="font-size:10px">(if the timer runs out it will take card automatically)</span><br />
+						</div>
+						<div><button class="button" disabled={card_passes <= 0} on:click={skipCard}>Pass</button>&nbsp;&nbsp;<button on:click={takeCard} class="button">Take Card</button></div>
 					{:else if (mode == modes.Host && gameState.deck_host.length >= deckSize) || (mode == modes.Guest && gameState.deck_guest.length >= deckSize)}
 						Draft Complete
 						<input id="deck-id-left" class="game-code-input" value={buildDeckCode(mode == modes.Host ? gameState.deck_host : gameState.deck_guest)} onclick="this.select();" type="text" />
@@ -153,9 +166,6 @@
 						<button on:click={() => bid(1)} class="round">+1</button>
 						<button on:click={() => bid(3)} class="round">+3</button>
 						<button on:click={() => bid(5)} class="round">+5</button>
-						<div style="clear:both;width:100%;margin-top:20px">
-							<button class="button">Pass</button>
-						</div>
 					{:else}
 						<input type="button" on:click={readyToDraft} class="button" value="Ready to Draft!" />
 					{/if}
