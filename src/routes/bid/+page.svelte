@@ -12,7 +12,9 @@
 	let gameState = '';
 	let socket;
 	let mode = '';
-	let debug = false;
+	let debug = true;
+	let deckSize = 2;
+	let card_passes = 3;
 
 	const modes = {
 		Host: 'Host',
@@ -27,8 +29,7 @@
 
 	socket.on('syncGameState', (serverGameState) => {
 		roomId = roomId = serverGameState.game_id;
-		if (gameState != serverGameState)
-			gameState = serverGameState;
+		if (gameState != serverGameState) gameState = serverGameState;
 	});
 
 	function createGame() {
@@ -38,6 +39,12 @@
 	function joinGame() {
 		var result = socket.emit('joinGame', roomId);
 		mode = modes.Guest;
+	}
+	function skipCard() {
+		var result = socket.emit('skipCard', roomId);
+	}
+	function takeCard() {
+		var result = socket.emit('takeCard', roomId);
 	}
 
 	function bid(bidAmount) {
@@ -89,7 +96,7 @@
 				<input type="button" class="button" on:click={createGame} value="Create Draft" />
 			{:else}
 				<input id="game-code" class="game-code-input" onclick="this.select();" bind:value={gameState.game_id} type="text" /><br /><br />
-				<input type="button" class="button" on:click={copyGameId("game-code")} value="Copy Code" />
+				<input type="button" class="button" on:click={copyGameId('game-code')} value="Copy Code" />
 				<br />
 				Waiting on opponent to connect...
 			{/if}
@@ -126,10 +133,19 @@
 		<tr>
 			<td align="center">
 				<div class="component-ui" style="min-height: 125px;">
-					{#if (mode == modes.Host && gameState.deck_host.length >= 12) || (mode == modes.Guest && gameState.deck_guest.length >= 12)}
+					{#if mode == modes.Host && gameState.deck_guest.length >= deckSize && gameState.deck_host.length < deckSize}
+						 <div>
+							Finish Draft <br/> You Can Pass {card_passes} More Times <br/>
+							<span style="font-size:10px">(if the timer runs out it will take card automatically)</span><br/>
+						</div>
+						<div><button class="button" on:click={skipCard}>Pass</button>&nbsp;&nbsp;<button on:click={takeCard} class="button">Take Card</button></div>
+					{:else if mode == modes.Guest && gameState.deck_host.length >= deckSize && gameState.deck_guest.length < deckSize}
+						Finish Draft Mode Guest<br/>
+						<button class="button">Pass</button> <button class="button">Take Card</button>
+					{:else if (mode == modes.Host && gameState.deck_host.length >= deckSize) || (mode == modes.Guest && gameState.deck_guest.length >= deckSize)}
 						Draft Complete
 						<input id="deck-id-left" class="game-code-input" value={buildDeckCode(mode == modes.Host ? gameState.deck_host : gameState.deck_guest)} onclick="this.select();" type="text" />
-						<input type="button" class="button" on:click={copyGameId("deck-id-left")} value="Copy Deck Code" />
+						<input type="button" class="button" on:click={copyGameId('deck-id-left')} value="Copy Deck Code" />
 					{:else if gameState.ready_guest == true && gameState.ready_host == true}
 						<div style="clear:both;width:100%;">
 							Your Gold: {mode == modes.Host ? gameState.gold_host : gameState.gold_guest} - Your Bid: {mode == modes.Host ? gameState.bid_host : gameState.bid_guest}<br /><br />
@@ -152,10 +168,10 @@
 				</div>
 			</td>
 			<td align="center" class="component-ui" style="min-height: 125px;">
-				{#if (mode == modes.Guest && gameState.deck_host.length >= 12) || (mode == modes.Host && gameState.deck_guest.length >= 12)}
+				{#if (mode == modes.Guest && gameState.deck_host.length >= deckSize) || (mode == modes.Host && gameState.deck_guest.length >= deckSize)}
 					Draft Complete
 					<input id="deck-id-right" class="game-code-input" value={buildDeckCode(mode == modes.Guest ? gameState.deck_host : gameState.deck_guest)} onclick="this.select();" type="text" />
-					<input type="button" class="button" on:click={copyGameId("deck-id-right")} value="Copy Deck Code" />
+					<input type="button" class="button" on:click={copyGameId('deck-id-right')} value="Copy Deck Code" />
 				{:else if gameState.ready_guest == true && gameState.ready_host == true}
 					Opponent Gold: {mode == modes.Host ? gameState.gold_guest : gameState.gold_host}<br /><br />
 				{:else if mode == modes.Host}
@@ -166,8 +182,6 @@
 			</td>
 		</tr>
 	</table>
-
-
 {/if}
 
 {#if debug}
