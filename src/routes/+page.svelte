@@ -2,6 +2,7 @@
 	import Header from './components/header.svelte';
 	import Footer from './components/footer.svelte';
 	import SelectMode from './components/select-mode.svelte';
+    import News from './components/news.svelte'
 </script>
 
 <svelte:head>
@@ -27,5 +28,7 @@
 <Header />
 
 <SelectMode />
+
+<News/>
 
 <Footer />
