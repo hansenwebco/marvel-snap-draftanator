@@ -16,6 +16,7 @@
 	let deckSize = 12;
 	let card_passes = 3;
 	let gameStarted = false;
+	let gameCompleted = false;
 
 	const modes = {
 		Host: 'Host',
@@ -35,6 +36,9 @@
 			console.log('game started');
 			gameStarted = true;
 		}
+		if (gameCompleted == false && serverGameState.deck_host.length >= deckSize && serverGameState.deck_guest.length >= deckSize) {
+			gameCompleted = true;
+		}
 	});
 
 	function createGame() {
@@ -47,7 +51,7 @@
 	}
 	function skipCard() {
 		card_passes--;
-		if (card_passes > 0) {
+		if (card_passes >= 0) {
 			var result = socket.emit('skipCard', roomId);
 		}
 	}
@@ -99,7 +103,7 @@
 <div>
 	<Header />
 </div>
-{#if gameStarted == false && (gameState.client_count == undefined || gameState.client_count < 2)}
+{#if gameCompleted == false && gameStarted == false && (gameState.client_count == undefined || gameState.client_count < 2)}
 	<div class="start-container">
 		<div class="component-ui start-option">
 			{#if gameState.game_id == null}
@@ -108,7 +112,7 @@
 			{:else}
 				<div class="start-directions">Give the code below to your opponent and they can enter it in the "Join Draft" dialog.</div>
 				<input id="game-code" class="game-code-input" onclick="this.select();" bind:value={gameState.game_id} type="text" /><br /><br />
-				<input type="button" class="button" on:click={()=>copyGameId('game-code')} value="Copy Code" />
+				<input type="button" class="button" on:click={() => copyGameId('game-code')} value="Copy Code" />
 				<br />
 				Waiting on opponent to connect...
 			{/if}
@@ -121,24 +125,24 @@
 			</div>
 		{/if}
 	</div>
-{:else if gameStarted == true && gameState.client_count < 2}
+{:else if gameStarted == true && gameCompleted == false && gameState.client_count < 2}
 	<div class="start-container">
 		<div class="component-ui start-option" style="width:500px;">
 			<div class="start-directions">
-				We lost connection to your opponent, they can rejoin the game by with the code below in the "Join Draft" dialog.<br/><br/>
+				We lost connection to your opponent, they can rejoin the game by with the code below in the "Join Draft" dialog.<br /><br />
 			</div>
-			<input id="game-code-reconnect" class="game-code-input" onclick="this.select();" bind:value={gameState.game_id} type="text" /><br /><br /><br/>
-			<input type="button" class="button" on:click={()=>copyGameId('game-code-reconnect')} value="Copy Code" />
+			<input id="game-code-reconnect" class="game-code-input" onclick="this.select();" bind:value={gameState.game_id} type="text" /><br /><br /><br />
+			<input type="button" class="button" on:click={() => copyGameId('game-code-reconnect')} value="Copy Code" />
 			<br />
 		</div>
 	</div>
 {/if}
 
-{#if gameState.client_count == 2}
+{#if gameState.client_count == 2 || gameCompleted == true}
 	<table style="margin:auto;">
 		<tr>
 			<td align="center">Your Deck<br /><br /></td>
-			<td align="center">Round 1 - Timer: {gameState.timer}</td>
+			<td align="center">Round {gameState.turn} - Timer: {gameState.timer}</td>
 			<td align="center">Opponent's Deck<br /><br /></td>
 		</tr>
 		<tr>
@@ -174,7 +178,7 @@
 					{:else if (mode == modes.Host && gameState.deck_host.length >= deckSize) || (mode == modes.Guest && gameState.deck_guest.length >= deckSize)}
 						Draft Complete
 						<input id="deck-id-left" class="game-code-input" value={buildDeckCode(mode == modes.Host ? gameState.deck_host : gameState.deck_guest)} onclick="this.select();" type="text" />
-						<input type="button" class="button" on:click={()=> copyGameId('deck-id-left')} value="Copy Deck Code" />
+						<input type="button" class="button" on:click={() => copyGameId('deck-id-left')} value="Copy Deck Code" />
 					{:else if gameState.ready_guest == true && gameState.ready_host == true}
 						<div style="clear:both;width:100%;">
 							Your Gold: {mode == modes.Host ? gameState.gold_host : gameState.gold_guest} - Your Bid: {mode == modes.Host ? gameState.bid_host : gameState.bid_guest}<br /><br />
@@ -191,15 +195,36 @@
 				<div class="component-ui" style="min-height: 125px;">
 					<div>Current Bid</div>
 					<div class="current-bid">{gameState.bid_host > gameState.bid_guest ? gameState.bid_host : gameState.bid_guest}</div>
+					<div style="font-size:20px;color:#95a2e4;">
+						{#if mode == modes.Host}
+							{#if gameState.bid_host > gameState.bid_guest}
+								🢀
+							{:else if gameState.bid_host < gameState.bid_guest}
+								🢂
+							{:else}
+								&nbsp;
+							{/if}
+						{/if}
+						{#if mode == modes.Guest}
+							{#if gameState.bid_host < gameState.bid_guest}
+								🢀
+							{:else if gameState.bid_host > gameState.bid_guest}
+								🢂
+							{:else}
+								&nbsp;
+							{/if}
+						{/if}
+					</div>
 				</div>
 			</td>
 			<td align="center" class="component-ui" style="min-height: 125px;">
 				{#if (mode == modes.Guest && gameState.deck_host.length >= deckSize) || (mode == modes.Host && gameState.deck_guest.length >= deckSize)}
 					Draft Complete
 					<input id="deck-id-right" class="game-code-input" value={buildDeckCode(mode == modes.Guest ? gameState.deck_host : gameState.deck_guest)} onclick="this.select();" type="text" />
-					<input type="button" class="button" on:click={()=> copyGameId('deck-id-right')} value="Copy Deck Code" />
+					<input type="button" class="button" on:click={() => copyGameId('deck-id-right')} value="Copy Deck Code" />
 				{:else if gameState.ready_guest == true && gameState.ready_host == true}
 					Opponent Gold: {mode == modes.Host ? gameState.gold_guest : gameState.gold_host}<br /><br />
+					Opponent Bid: {mode == modes.Host ? gameState.bid_guest : gameState.bid_host}
 				{:else if mode == modes.Host}
 					Status: {gameState.ready_guest == true ? 'Ready' : 'Not Ready'}
 				{:else if mode == modes.Guest}
