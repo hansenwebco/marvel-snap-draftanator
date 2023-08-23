@@ -19,6 +19,7 @@
 	let gameStarted = false;
 	let gameCompleted = false;
 	let open = true;
+	let disableBidButtons = false;
 
 	const modes = {
 		Host: 'Host',
@@ -40,6 +41,12 @@
 		}
 		if (gameCompleted == false && serverGameState.deck_host.length >= deckSize && serverGameState.deck_guest.length >= deckSize) {
 			gameCompleted = true;
+		}
+
+		if ((mode == modes.Host && gameState.pass_host == true) || (mode == modes.Guest && gameState.pass_guest)) {
+			disableBidButtons = true;
+		} else {
+			disableBidButtons = false;
 		}
 	});
 
@@ -75,6 +82,11 @@
 	}
 	function readyToDraft() {
 		socket.emit('readyGame', { mode: mode, gameId: roomId });
+	}
+
+	function passCard() {
+		console.log('pass');
+		socket.emit('passCard', { mode: mode, gameId: roomId });
 	}
 
 	function copyGameId(elm) {
@@ -205,11 +217,13 @@
 						<div style="clear:both;width:100%;">
 							Your Gold: {mode == modes.Host ? gameState.gold_host : gameState.gold_guest} - Your Bid: {mode == modes.Host ? gameState.bid_host : gameState.bid_guest}<br /><br />
 						</div>
-						<button on:click={() => bid(1)} class="round">+1</button>
-						<button on:click={() => bid(3)} class="round">+3</button>
-						<button on:click={() => bid(5)} class="round">+5</button>
+
+						<button disabled={disableBidButtons} on:click={() => bid(1)} class="round">+1</button>
+						<button disabled={disableBidButtons} on:click={() => bid(3)} class="round">+3</button>
+						<button disabled={disableBidButtons} on:click={() => bid(5)} class="round">+5</button>
+
 						<div style="clear:both;width:100%;margin-top:20px;">
-							<input type="button" class="button" value="Pass On Card" />
+							<input disabled={disableBidButtons} type="button" on:click={passCard} class="button" value="Pass On Card" />
 						</div>
 					{:else}
 						<input type="button" on:click={readyToDraft} class="button" value="Ready to Draft!" />
@@ -317,7 +331,15 @@
 		border-radius: 50%;
 		margin-right: 5px;
 		margin-left: 5px;
+		cursor: pointer;
 	}
+	button.round:disabled {
+		background-color: #092e42;
+		box-shadow: 0 2px 4px #000;
+		color: white;
+		cursor: default;
+	}
+
 	.current-bid {
 		font-size: 55px;
 		width: 100%;
