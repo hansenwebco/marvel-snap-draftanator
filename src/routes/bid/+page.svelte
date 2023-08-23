@@ -174,7 +174,7 @@
 					{:else if (mode == modes.Host && gameState.deck_host.length >= deckSize) || (mode == modes.Guest && gameState.deck_guest.length >= deckSize)}
 						Draft Complete
 						<input id="deck-id-left" class="game-code-input" value={buildDeckCode(mode == modes.Host ? gameState.deck_host : gameState.deck_guest)} onclick="this.select();" type="text" />
-						<input type="button" class="button" on:click={copyGameId('deck-id-left')} value="Copy Deck Code" />
+						<input type="button" class="button" on:click={()=> copyGameId('deck-id-left')} value="Copy Deck Code" />
 					{:else if gameState.ready_guest == true && gameState.ready_host == true}
 						<div style="clear:both;width:100%;">
 							Your Gold: {mode == modes.Host ? gameState.gold_host : gameState.gold_guest} - Your Bid: {mode == modes.Host ? gameState.bid_host : gameState.bid_guest}<br /><br />
@@ -197,7 +197,7 @@
 				{#if (mode == modes.Guest && gameState.deck_host.length >= deckSize) || (mode == modes.Host && gameState.deck_guest.length >= deckSize)}
 					Draft Complete
 					<input id="deck-id-right" class="game-code-input" value={buildDeckCode(mode == modes.Guest ? gameState.deck_host : gameState.deck_guest)} onclick="this.select();" type="text" />
-					<input type="button" class="button" on:click={copyGameId('deck-id-right')} value="Copy Deck Code" />
+					<input type="button" class="button" on:click={()=> copyGameId('deck-id-right')} value="Copy Deck Code" />
 				{:else if gameState.ready_guest == true && gameState.ready_host == true}
 					Opponent Gold: {mode == modes.Host ? gameState.gold_guest : gameState.gold_host}<br /><br />
 				{:else if mode == modes.Host}
