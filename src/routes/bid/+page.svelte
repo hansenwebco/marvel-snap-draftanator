@@ -208,6 +208,9 @@
 						<button on:click={() => bid(1)} class="round">+1</button>
 						<button on:click={() => bid(3)} class="round">+3</button>
 						<button on:click={() => bid(5)} class="round">+5</button>
+						<div style="clear:both;width:100%;margin-top:20px;">
+							<input type="button" class="button" value="Pass On Card" />
+						</div>
 					{:else}
 						<input type="button" on:click={readyToDraft} class="button" value="Ready to Draft!" />
 					{/if}
