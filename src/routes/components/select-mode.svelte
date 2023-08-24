@@ -13,7 +13,7 @@
 	<div class="mode">
 		<div class="vs-wrapper">
 			<img style="" class="vs" alt="vs" src="/images/vs.png" />
-			<a href="/auction"><span id="btn-sealed" class="material-symbols-outlined icon mode-sealed">gavel</span><br /><br /></a>
+			<a href="/auction"><span id="btn-sealed" class="material-symbols-outlined icon mode-auction">gavel</span><br /><br /></a>
 		</div>
 		<a class="btn btn-primary mode-auction" id="btn-sealed-2">Auction Mode</a>
 		<div class="start-text">1vs1 draft mode, bid on cards and outsmart your opponent in this realtime draft!<br /><br /><i>(Limited Time Mode)</i></div>
