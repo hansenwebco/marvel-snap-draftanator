@@ -41,6 +41,8 @@
 	<div id="deck-view">
 		{#each Array(12) as _, index (index)}
 			{#if index < cards.length}
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 				<img id="card{index + 1}" on:click={cardClicked(cards[index])} data-tippy-content={cards[index].desc} class="cards cursor" alt="" src="{cdn}/images/cards/{cards[index].id}.webp" />
 			{:else}
 				<img id="card{index + 1}" class="cards" alt="Card 1" src="/images/deck-blank.png" />
