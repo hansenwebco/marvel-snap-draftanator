@@ -2,7 +2,7 @@
 	<div class="header">Update: August 23, 2023</div>
     <br/>
 	The site has been completely rewritten, hopefully no new bugs!  If you do find bugs feel free to use the links or discord below to report them.<br/><br/>
-    <i>New mode coming in the next few days, head to head drafting!  Get Ready!</i>
+    <i>New mode live! Head to head drafting in Auction Mode!</i>
 	<br /><br />
 	Support the site @ <a href="https://www.buymeacoffee.com/stonedonkey">buy me a coffee</a>.
 </div>

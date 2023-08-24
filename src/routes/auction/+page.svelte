@@ -19,6 +19,7 @@
 	let gameStarted = false;
 	let gameCompleted = false;
 	let open = true;
+	let disableBidButtons = false;
 
 	const modes = {
 		Host: 'Host',
@@ -40,6 +41,12 @@
 		}
 		if (gameCompleted == false && serverGameState.deck_host.length >= deckSize && serverGameState.deck_guest.length >= deckSize) {
 			gameCompleted = true;
+		}
+
+		if ((mode == modes.Host && gameState.pass_host == true) || (mode == modes.Guest && gameState.pass_guest)) {
+			disableBidButtons = true;
+		} else {
+			disableBidButtons = false;
 		}
 	});
 
@@ -75,6 +82,11 @@
 	}
 	function readyToDraft() {
 		socket.emit('readyGame', { mode: mode, gameId: roomId });
+	}
+
+	function passCard() {
+		console.log('pass');
+		socket.emit('passCard', { mode: mode, gameId: roomId });
 	}
 
 	function copyGameId(elm) {
@@ -152,9 +164,11 @@
 			<div style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
 				<ul>
 					<li>Players are presented with random cards and participate in an auction-style bidding process to acquire them.</li>
-					<li>The winning player obtains the card, while the losing player receives 3 gold coins added to their bank.</li>
+					<li>The winning player obtains the card and pays the bid, while the losing player keeps their bid but also has 3 gold coins added to their bank.</li>
+					<li>If both players pass a new card will be put up for auction, there is no alert if your opponent passed.</li>
+					<li>You can only pass if you've not made a bid.</li>
+					<li>If no player places a bid on a card before the timer expires, that card is skipped and another is drawn and no gold is awarded.</li>
 					<li>Each player starts with 10 gold coins and has a maximum bank limit of 20 gold coins.</li>
-					<li>If no player places a bid on a card, that card is skipped and another is drawn.</li>
 					<li>When one player completes their deck of 12 cards, the other player continues to receive random cards. They can choose to accept the card or pass (limited to three passes).</li>
 					<li>Once both players have completed their decks, deck codes are provided to be pasted into Marvel Snap.</li>
 				</ul>
@@ -205,9 +219,14 @@
 						<div style="clear:both;width:100%;">
 							Your Gold: {mode == modes.Host ? gameState.gold_host : gameState.gold_guest} - Your Bid: {mode == modes.Host ? gameState.bid_host : gameState.bid_guest}<br /><br />
 						</div>
-						<button on:click={() => bid(1)} class="round">+1</button>
-						<button on:click={() => bid(3)} class="round">+3</button>
-						<button on:click={() => bid(5)} class="round">+5</button>
+
+						<button disabled={disableBidButtons} on:click={() => bid(1)} class="round">+1</button>
+						<button disabled={disableBidButtons} on:click={() => bid(3)} class="round">+3</button>
+						<button disabled={disableBidButtons} on:click={() => bid(5)} class="round">+5</button>
+
+						<div style="clear:both;width:100%;margin-top:20px;">
+							<input disabled={disableBidButtons} type="button" on:click={passCard} class="button" value="Pass On Card" />
+						</div>
 					{:else}
 						<input type="button" on:click={readyToDraft} class="button" value="Ready to Draft!" />
 					{/if}
@@ -281,6 +300,7 @@
 		width: 300px;
 		text-align: center;
 		margin: 20px;
+		min-height:130px;
 	}
 
 	#card-desc {
@@ -314,7 +334,15 @@
 		border-radius: 50%;
 		margin-right: 5px;
 		margin-left: 5px;
+		cursor: pointer;
 	}
+	button.round:disabled {
+		background-color: #092e42;
+		box-shadow: 0 2px 4px #000;
+		color: white;
+		cursor: default;
+	}
+
 	.current-bid {
 		font-size: 55px;
 		width: 100%;
