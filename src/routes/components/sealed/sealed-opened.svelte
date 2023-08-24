@@ -81,8 +81,9 @@
 
 	<div class="component-ui card-align">
 		{#each cards as card}
-			<!-- svelte-ignore a11y-missing-attribute -->
+		
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 			<div><img on:click={cardPicked(card)} data-tippy-content={card.desc} class="card-pick pointer" src="{cdn}/images/cards/{card.id}.webp" alt={card.name} /></div>
 			&nbsp;
 		{/each}

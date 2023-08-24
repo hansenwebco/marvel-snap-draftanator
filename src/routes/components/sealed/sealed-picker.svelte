@@ -102,7 +102,9 @@
 			<div class="card-pack">
 				<div id="cardtray">
 					{#if packs > 0}
-						<img src="/images/CardPack-AnimalsAssemble.png" on:click={() => handleDeal()} on:click={() => handleDeal()} alt="Card Pack " class="card-pack-image" />
+						<!-- svelte-ignore a11y-click-events-have-key-events -->
+						<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+						<img src="/images/CardPack-BigInJapan.png" on:click={() => handleDeal()} on:click={() => handleDeal()} alt="Card Pack " class="card-pack-image" />
 					{/if}
 				</div>
 				<div id="packs-remaining">{packs} Packs Remaning</div>
@@ -113,8 +115,10 @@
 			<div class="card-images-container">
 				{#if hideCards}
 					{#each displayedCards as card, index}
+						<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 						<div class="card-image-container">
-							<img src={card ? card : '/images/cardback-full-animalsassemble.png'} class="card-image" alt={`Card ${index}`} on:click={() => handleClick(index, false)} />
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<img src={card ? card : '/images/CardBack-BigInJapan.png'} class="card-image" alt={`Card ${index}`} on:click={() => handleClick(index, false)} />
 							{#if card}
 								<div class="card-description">{allCards[index].desc}</div>
 								<div class="reroll"><button class="button-reroll button button-small" on:keydown={() => handleClick(index, true)} on:click={() => handleClick(index, true)}>Don't Have Card</button></div>
