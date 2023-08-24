@@ -300,6 +300,7 @@
 		width: 300px;
 		text-align: center;
 		margin: 20px;
+		min-height:130px;
 	}
 
 	#card-desc {
