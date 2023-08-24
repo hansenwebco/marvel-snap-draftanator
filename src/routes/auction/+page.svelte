@@ -26,8 +26,8 @@
 		Guest: 'Guest'
 	};
 
-	const SIGNALIO_SERVER = 'wss://stone-donkey.onrender.com';
-	//const SIGNALIO_SERVER = 'ws://localhost:3000';
+	//const SIGNALIO_SERVER = 'wss://stone-donkey.onrender.com';
+	const SIGNALIO_SERVER = 'ws://localhost:3000';
 	socket = io(SIGNALIO_SERVER);
 
 	onMount(async () => {});
@@ -164,9 +164,11 @@
 			<div style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
 				<ul>
 					<li>Players are presented with random cards and participate in an auction-style bidding process to acquire them.</li>
-					<li>The winning player obtains the card, while the losing player receives 3 gold coins added to their bank.</li>
+					<li>The winning player obtains the card and pays the bid, while the losing player keeps their bid but also has 3 gold coins added to their bank.</li>
+					<li>If both players pass a new card will be put up for auction, there is no alert if your opponent passed.</li>
+					<li>You can only pass if you've not made a bid.</li>
+					<li>If no player places a bid on a card before the timer expires, that card is skipped and another is drawn and no gold is awarded.</li>
 					<li>Each player starts with 10 gold coins and has a maximum bank limit of 20 gold coins.</li>
-					<li>If no player places a bid on a card, that card is skipped and another is drawn.</li>
 					<li>When one player completes their deck of 12 cards, the other player continues to receive random cards. They can choose to accept the card or pass (limited to three passes).</li>
 					<li>Once both players have completed their decks, deck codes are provided to be pasted into Marvel Snap.</li>
 				</ul>
