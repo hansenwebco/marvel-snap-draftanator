@@ -26,8 +26,8 @@
 		Guest: 'Guest'
 	};
 
-	//const SIGNALIO_SERVER = 'wss://stone-donkey.onrender.com';
-	const SIGNALIO_SERVER = 'ws://localhost:3000';
+	const SIGNALIO_SERVER = 'wss://stone-donkey.onrender.com';
+	//const SIGNALIO_SERVER = 'ws://localhost:3000';
 	socket = io(SIGNALIO_SERVER);
 
 	onMount(async () => {});
