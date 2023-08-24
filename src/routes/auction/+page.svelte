@@ -96,7 +96,7 @@
 
 <svelte:head>
 	<title>Marvel Snap! Draftanator - Bid Draft</title>
-	<meta name="title" content="Marvel Snap! Draftanator - Arena Draft" />
+	<meta name="title" content="Marvel Snap! Draftanator - Auction Draft" />
 	<meta name="description" content="The original Marvel Snap site for drafting decks.  Mavel Snap Draftanator supports sealed and arena formats and even allows you to draft decks with friends!" />
 
 	<!-- Open Graph / Facebook -->
