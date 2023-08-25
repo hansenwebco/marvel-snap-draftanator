@@ -95,7 +95,7 @@
 </script>
 
 <svelte:head>
-	<title>Marvel Snap! Draftanator - Bid Draft</title>
+	<title>Marvel Snap! Draftanator - Auction Draft</title>
 	<meta name="title" content="Marvel Snap! Draftanator - Auction Draft" />
 	<meta name="description" content="The original Marvel Snap site for drafting decks.  Mavel Snap Draftanator supports sealed and arena formats and even allows you to draft decks with friends!" />
 
@@ -154,7 +154,7 @@
 
 {#if gameState.client_count == 2 || gameCompleted == true}
 	{#if open}
-		<Modal title="Marvel Snap Draftanator - Bid Draft" onCancel={() => (open = false)} let:focus>
+		<Modal title="Marvel Snap Draftanator - Auction Draft" onCancel={() => (open = false)} let:focus>
 			<style>
 				li {
 					margin-bottom: 10px;
