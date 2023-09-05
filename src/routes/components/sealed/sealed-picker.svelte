@@ -54,7 +54,10 @@
 			}
 		} while (cardPicked == 0);
 
-		displayedCards[index] = `https://snapdata-cdn.stonedonkey.com/images/cards/${allCards[cardPicked].id}.webp`;
+		//displayedCards[index] = `https://snapdata-cdn.stonedonkey.com/images/cards/${allCards[cardPicked].id}.webp`;
+
+		displayedCards[index] = allCards[cardPicked];
+
 		packCards[index] = allCards[cardPicked].id;
 
 		//console.log(cardsOpened);
@@ -118,9 +121,9 @@
 						<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 						<div class="card-image-container">
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
-							<img src={card ? card : '/images/CardBack-LokiForAllTime.png'} class="card-image" alt={`Card ${index}`} on:click={() => handleClick(index, false)} />
+							<img src={displayedCards[index] ? `https://snapdata-cdn.stonedonkey.com/images/cards/${displayedCards[index].id}.webp` : '/images/CardBack-LokiForAllTime.png'} class="card-image" alt={`Card ${index}`} on:click={() => handleClick(index, false)} />
 							{#if card}
-								<div class="card-description">{allCards[index].desc}</div>
+								<div class="card-description">{displayedCards[index].desc}</div>
 								<div class="reroll"><button class="button-reroll button button-small" on:keydown={() => handleClick(index, true)} on:click={() => handleClick(index, true)}>Don't Have Card</button></div>
 							{:else}
 								<div class="card-description" />
@@ -148,10 +151,10 @@
 	}
 	.card-description {
 		text-align: center;
-		max-width: 140px;
+		max-width: 150px;
 		font-size: 9px;
-		min-height: 40px;
-		max-height: 40px;
+		min-height: 45px;
+		max-height: 45px;
 		margin-left: 5px;
 		margin-right: 5px;
 		overflow: hidden;
