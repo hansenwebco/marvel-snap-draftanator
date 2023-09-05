@@ -104,7 +104,7 @@
 					{#if packs > 0}
 						<!-- svelte-ignore a11y-click-events-have-key-events -->
 						<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-						<img src="/images/CardPack-BigInJapan.png" on:click={() => handleDeal()} on:click={() => handleDeal()} alt="Card Pack " class="card-pack-image" />
+						<img src="/images/CardPack-LokiForAllTime.png" on:click={() => handleDeal()} on:click={() => handleDeal()} alt="Card Pack " class="card-pack-image" />
 					{/if}
 				</div>
 				<div id="packs-remaining">{packs} Packs Remaning</div>
@@ -118,7 +118,7 @@
 						<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 						<div class="card-image-container">
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
-							<img src={card ? card : '/images/CardBack-BigInJapan.png'} class="card-image" alt={`Card ${index}`} on:click={() => handleClick(index, false)} />
+							<img src={card ? card : '/images/CardBack-LokiForAllTime.png'} class="card-image" alt={`Card ${index}`} on:click={() => handleClick(index, false)} />
 							{#if card}
 								<div class="card-description">{allCards[index].desc}</div>
 								<div class="reroll"><button class="button-reroll button button-small" on:keydown={() => handleClick(index, true)} on:click={() => handleClick(index, true)}>Don't Have Card</button></div>
@@ -182,6 +182,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		min-height: 270px;
 	}
 
 	.card-image {
