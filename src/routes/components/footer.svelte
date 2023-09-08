@@ -1,6 +1,4 @@
 <script>
-	import { onMount } from 'svelte';
-    let version = process.env.GITHUB_RUN_NUMBER ? process.env.GITHUB_RUN_NUMBER : "-" ;
 
 </script>
 
@@ -11,7 +9,7 @@
 	<a href="https://discord.gg/xXh7kccEbe" target="_blank" rel="noreferrer">Discord</a> ●
 	<a target="_blank" rel="noreferrer" href="https://github.com/hansenwebco/marvel-snap-draftanator">Github</a> ●
 	<a target="_blank" rel="noreferrer" href="https://github.com/hansenwebco/marvel-snap-draftanator/issues">Bugs</a> ●
-	<span id="version">version: {version}</span>
+	<span id="version">3.0.6</span>
 </div>
 
 <style>
