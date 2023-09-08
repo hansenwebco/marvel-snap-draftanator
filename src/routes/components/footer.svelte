@@ -1,9 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
-    let version = "local";
-	onMount(async () => {
-        version = process.env.GITHUB_RUN_NUMBER;
-    });
+    let version = process.env.GITHUB_RUN_NUMBER ? process.env.GITHUB_RUN_NUMBER : "-" ;
+
 </script>
 
 <div id="footer">
