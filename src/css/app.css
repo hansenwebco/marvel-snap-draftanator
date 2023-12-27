@@ -172,3 +172,16 @@ a:hover {
   margin: auto;
   text-align: center;
 }
+
+.text-input {
+  width:100%;
+  border-radius: 5px 5px 5px 5px;
+  font-size: 13px;
+  padding:8px;
+  margin-right:0px;
+  border:none;
+}
+
+.text-input:focus {
+  outline:none;
+}

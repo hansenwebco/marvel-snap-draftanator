@@ -28,6 +28,7 @@
 		"modal-svelte": "^1.1.1",
 		"posthog-js": "^1.91.1",
 		"socket.io-client": "^4.7.2",
-		"tippy.js": "^6.3.7"
+		"tippy.js": "^6.3.7",
+		"tmi.js": "^1.8.5"
 	}
 }
