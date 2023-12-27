@@ -1,11 +1,12 @@
 <script>
 	import { onMount } from 'svelte';
-	import {sortCards , randomNum } from '$lib/global.js';
+	import { sortCards, randomNum } from '$lib/global.js';
 	import { get } from 'svelte/store';
 
 	// get items from our store
 	import { API_URL } from '$lib/store.js';
 	import { DECK } from '$lib/store.js';
+	import TwitchDraft from './twitch-draft.svelte';
 
 	let pickList = '';
 	let cards, pick1, pick2, pick3;
@@ -15,6 +16,10 @@
 	let card1Text = '';
 	let card2Text = '';
 	let card3Text = '';
+
+	let resetVotes;
+	let connected = false;
+	let totalCards = 0;
 
 	const DATA_URL = get(API_URL);
 
@@ -30,10 +35,10 @@
 	});
 
 	function pickCards(redrawCardNum) {
-		
 		// need to remove all click handlers until the images load
+		resetVotes();
 		let totalCards = cards.length - 1;
-		
+
 		if (redrawCardNum == 1 || redrawCardNum == 0) {
 			do {
 				pick1 = randomNum(0, totalCards);
@@ -63,7 +68,6 @@
 			card3Alt = cards[pick3].name;
 			card3Text = cards[pick3].desc;
 		}
-	
 	}
 
 	function cardPicked(card) {
@@ -72,11 +76,17 @@
 		$DECK = sortCards($DECK);
 		DECK.set($DECK);
 		pickCards(0);
+		resetVotes();
 	}
 </script>
 
+<TwitchDraft bind:totalCards bind:connected bind:resetVotes />
+
 <div class="component-ui">
 	<div class="arena-pick">
+		{#if connected}
+			<div id="vote-1" class="vote-master circle">0%</div>
+		{/if}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 		<img on:click={cardPicked(cards[pick1])} src={card1Image} alt={card1Alt} />
@@ -85,6 +95,9 @@
 	</div>
 
 	<div class="arena-pick">
+		{#if connected}
+			<div id="vote-2" class="vote-master circle">0%</div>
+		{/if}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 		<img on:click={cardPicked(cards[pick2])} src={card2Image} alt={card2Alt} />
@@ -93,16 +106,26 @@
 	</div>
 
 	<div class="arena-pick">
-			<!-- svelte-ignore a11y-click-events-have-key-events -->
+		{#if connected}
+			<div id="vote-3" class="vote-master circle">0%</div>
+		{/if}
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 		<img on:click={cardPicked(cards[pick3])} src={card3Image} alt={card3Alt} />
 		<div class="card-desc" id="card-desc-3">{card3Text}</div>
 		<button class="button" on:click={() => pickCards(3)}>Don't Have Card</button>
 	</div>
 </div>
+{#if connected}
+	<div class="component-ui">
+		<div id="live-voting">
+			<div id="totalvotes">Total Votes: {totalCards}</div>
+			<div id="directions">Vote in chat with #card1, #card2, #card3</div>
+		</div>
+	</div>
+{/if}
 
 <style>
-
 	.arena-pick {
 		text-align: center;
 		margin: 0px;
@@ -123,7 +146,29 @@
 	}
 
 	.button {
-		margin-top:3px;
+		margin-top: 3px;
 	}
-	
+
+	/* Vote stuff */
+	.circle {
+		width: 60px;
+		line-height: 60px;
+		border-radius: 50%;
+		text-align: center;
+		font-size: 16px;
+		border: 3px solid #000;
+		background-color: black;
+		position: absolute;
+		margin-left: 170px;
+		margin-top: 90px;
+	}
+	#totalvotes {
+		float: left;
+	}
+	#directions {
+		float: right;
+	}
+	#live-voting {
+		width: 100%;
+	}
 </style>

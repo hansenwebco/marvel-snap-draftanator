@@ -49,6 +49,7 @@
 		margin-right:0px;
 		border:none;
 	}
+
 	.button-primary {
 		border-radius: 0px 10px 10px 0px;
 		margin-left:0px;
