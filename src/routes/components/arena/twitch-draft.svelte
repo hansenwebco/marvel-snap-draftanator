@@ -42,7 +42,7 @@
 
 		client.on('connected', (address, port) => {
 			connected = true;
-			console.log('Connected to Twitch succesfully...');
+			console.log('Connected to Twitch successfully...');
 		});
 
 		client.on('disconnected', (reason) => {
@@ -75,7 +75,7 @@
 				//console.log(card1, card2, card3, totalCards);
 				voters.push(username);
 			} else {
-				console.log(username + ' already voted..');
+				//console.log(username + ' already voted..');
 			}
 		});
 	}
@@ -84,13 +84,14 @@
 <div id="live">
 	<div id="live-start" class="live-start">
 		{#if !connected}
-			Connect to Twitch chat to vote, enter your channel name below to add bot:<br />
+			Connect to Twitch your chat, enter your channel name:
 			<br /><br />
 			<div class="input-group mb-3">
 				<input type="text" class="form-control text-input" aria-describedby="startStreamVote" value="" style="width:300px;" id="vote-url" />
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<!-- svelte-ignore a11y-no-static-element-interactions -->
-				<a class="button" id="startStreamVote" on:click={() => connectTwitch()}>Connect</a>
+				<a class="button" id="startStreamVote" on:click={() => connectTwitch()}>Connect</a><br/><br/>
+				<span class="small"><i>(no Twitch permissions are required to enable voting)</i></span>
 			</div>
 		{:else}
 			You're connected to Twitch channel {channel}.
@@ -118,7 +119,9 @@
 		text-align: center;
 		cursor: pointer;
 	}
-
+	.small { 
+		font-size:10px;
+	}
 	.live-start {
 		font-size: 12px;
 		background-color: #222;
