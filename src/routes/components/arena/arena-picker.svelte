@@ -115,13 +115,15 @@
 		<div class="card-desc" id="card-desc-3">{card3Text}</div>
 		<button class="button" on:click={() => pickCards(3)}>Don't Have Card</button>
 	</div>
-	{#if connected}
-	<div id="vote-details-master">
-		<br/>
-		<div id="totalvotes">Live Voting: {totalCards}</div>
-	</div>   
-	{/if}
 </div>
+{#if connected}
+	<div class="component-ui">
+		<div id="live-voting">
+			<div id="totalvotes">Total Votes: {totalCards}</div>
+			<div id="directions">Vote in chat with #card1, #card2, #card3</div>
+		</div>
+	</div>
+{/if}
 
 <style>
 	.arena-pick {
@@ -161,7 +163,12 @@
 		margin-top: 90px;
 	}
 	#totalvotes {
-		width:400px;
-		text-align: center;
+		float: left;
+	}
+	#directions {
+		float: right;
+	}
+	#live-voting {
+		width: 100%;
 	}
 </style>

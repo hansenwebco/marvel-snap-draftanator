@@ -29,7 +29,11 @@
 	};
 	function connectTwitch() {
 		console.log('Connecting to Twitch...');
-		channel = document.getElementById('vote-url').value;
+		channel = document.getElementById('vote-url').value.trim();
+		if (channel.length <= 0) {
+			alert('Must enter a channel name.');
+			return;
+		}
 		const client = new tmi.Client({
 			channels: [channel]
 		});
@@ -83,13 +87,13 @@
 			Connect to Twitch chat to vote, enter your channel name below to add bot:<br />
 			<br /><br />
 			<div class="input-group mb-3">
-				<input type="text" class="form-control text-input" aria-describedby="startStreamVote" value="stonedonkey" style="width:300px;" onclick="this.select();" id="vote-url" />
+				<input type="text" class="form-control text-input" aria-describedby="startStreamVote" value="" style="width:300px;" id="vote-url" />
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<!-- svelte-ignore a11y-no-static-element-interactions -->
 				<a class="button" id="startStreamVote" on:click={() => connectTwitch()}>Connect</a>
 			</div>
 		{:else}
-			You're connected to Twitch {channel}.
+			You're connected to Twitch channel {channel}.
 		{/if}
 	</div>
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -124,5 +128,6 @@
 		border-bottom-right-radius: 25px;
 		border: solid 1px #eee;
 		display: none;
+		text-align: center;
 	}
 </style>
