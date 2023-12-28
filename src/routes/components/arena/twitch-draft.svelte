@@ -103,6 +103,12 @@
 </div>
 
 <style>
+
+@media (max-width: 768px){
+  #live {
+    display: none;
+  }
+}
 	#live {
 		position: absolute;
 		right: 30px;
