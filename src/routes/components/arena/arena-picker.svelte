@@ -129,6 +129,7 @@
 	.arena-pick {
 		text-align: center;
 		margin: 0px;
+		height:350px;
 	}
 
 	.card-desc {
@@ -137,7 +138,7 @@
 		max-width: 180px;
 		margin-left: auto;
 		margin-right: auto;
-		min-height: 40px;
+		min-height: 50px;
 		margin-top: 3px;
 	}
 
