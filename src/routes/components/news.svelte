@@ -1,13 +1,13 @@
 <div id="notice">
-	<div class="header">Update: December 27, 2023</div>
+	
 	<br />
 	<div id="twitch">
 		<img width="50" alt="Twitch Logo" src="images/twitch.png" />
 	</div>
 	Twitch voting has been added to "Arena Mode" for streamers.  Simply click on the red tab on the top right of the site, enter your
 	channel name and your viewers can vote in real time (Beta) - Please let me know of any bugs!
-	<br /><br /><br/>
-	Support the site @ <a href="https://www.buymeacoffee.com/stonedonkey">buy me a coffee</a>.
+	<br /><br /><br/><br/>
+	<center>Support the site @ <a href="https://www.buymeacoffee.com/stonedonkey">buy me a coffee</a>.</center>
 </div>
 
 <style>
@@ -32,7 +32,7 @@
 		border-radius: 10px;
 		text-align: left;
 		margin: auto;
-		margin-top: 40px;
+		margin-top: 30px;
 		padding: 20px;
 		font-family: Arial, Helvetica, sans-serif;
 		font-size: 15px;
