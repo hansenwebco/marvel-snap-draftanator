@@ -35,8 +35,8 @@
 
 <Header />
 
-<SelectMode />
-
 <News />
+
+<SelectMode />
 
 <Footer />

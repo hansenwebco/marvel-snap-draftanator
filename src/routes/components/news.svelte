@@ -1,33 +1,20 @@
 <div id="notice">
-	
-	<br />
-	<div id="twitch">
-		<img width="50" alt="Twitch Logo" src="images/twitch.png" />
-	</div>
-	Twitch voting has been added to "Arena Mode" for streamers.  Simply click on the red tab on the top right of the site, enter your
-	channel name and your viewers can vote in real time (Beta) - Please let me know of any bugs!
-	<br /><br /><br/><br/>
-	<center>Support the site @ <a href="https://www.buymeacoffee.com/stonedonkey">buy me a coffee</a>.</center>
+
+	<div class="header">Notice: Draftanator Is No Longer Being Maintained</div>
+	<br/>
+	This website and product are no longer being actively maintained. If you are interested in continuing development, updating the content, or taking over ownership, please reach out. My contact information can be found in the footer below.
+	<br /><br />
+	The below modes will continue to function but cards and values are not being updated.
 </div>
 
 <style>
-	#twitch {
-		float: left;
-		padding:5px;
-		background-color:white;
-		margin:5px;
-		margin-top:-10px;
-		margin-right:10px;
-		border-radius: 10px;
-	}
-
 	.header {
 		font-weight: bold;
 		font-size: 16px;
 		font-family: 'Orbitron', Arial, Helvetica, sans-serif;
 	}
 	#notice {
-		background-color: #291763;
+		background-color:rgb(71, 5, 5);
 		width: 900px;
 		border-radius: 10px;
 		text-align: left;
@@ -36,6 +23,6 @@
 		padding: 20px;
 		font-family: Arial, Helvetica, sans-serif;
 		font-size: 15px;
-		border: solid 3px white;
+		border: solid 3px rgb(197, 12, 12);
 	}
 </style>
