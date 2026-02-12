@@ -10,29 +10,12 @@
 		<a class="btn btn-primary mode-sealed" id="btn-sealed-2">Sealed Mode</a>
 		<div class="start-text">Open five packs of random cards and build the best deck you can!</div>
 	</div>
-	<div class="mode">
-		<div class="vs-wrapper">
-			<img style="" class="vs" alt="vs" src="/images/vs.png" />
-			<a href="/auction"><span id="btn-auction" class="material-symbols-outlined icon mode-auction">gavel</span><br /><br /></a>
-		</div>
-		<a class="btn btn-primary mode-auction" id="btn-auction-2">Auction Mode</a>
-		<div class="start-text">1vs1 draft mode, bid on cards and outsmart your opponent in this realtime draft!<br /><br /><i>(Limited Time Mode)</i></div>
-	</div>
+
+
 </div>
 
 <style>
-	.vs-wrapper {
-		position: relative;
-		padding: 0px;
-		margin: 0px;
-	}
-	.vs {
-		position: absolute;
-		width: 55px;
-		left: 190px;
-		top: 100px;
-		z-index: 50;
-	}
+
 	.container {
 		margin-top: 50px;
 		display: inline-flex;
