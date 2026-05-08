@@ -3,14 +3,9 @@
 	import Footer from './components/footer.svelte';
 	import SelectMode from './components/select-mode.svelte';
 	import News from './components/news.svelte';
-	import posthog from 'posthog-js';
     import { onMount } from 'svelte';
 
-	onMount(() => {
-		posthog.init('phc_wvClKxKDq14TZGU0LpUYP3gG6SvisU4oSviGQSNmrab');
-	    //posthog.identify('USER_ID'); // Optionally, identify the user
-		posthog.capture('Home Page Loaded');
-	});
+
 </script>
 
 <svelte:head>
